@@ -19,6 +19,7 @@ function App() {
     design: 'Design Studio',
     contact: 'Contact',
     game: 'Games',
+    terminal: 'Terminal',
   };
 
   useEffect(() => {

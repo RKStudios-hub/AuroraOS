@@ -6,6 +6,7 @@ import ProjectsWindow from '../windows/ProjectsWindow';
 import DesignWindow from '../windows/DesignWindow';
 import ContactWindow from '../windows/ContactWindow';
 import GameWindow from '../windows/GameWindow';
+import TerminalWindow from '../windows/TerminalWindow';
 
 const windowComponents = {
   about: AboutWindow,
@@ -13,6 +14,7 @@ const windowComponents = {
   design: DesignWindow,
   contact: ContactWindow,
   game: GameWindow,
+  terminal: TerminalWindow,
 };
 
 const desktopApps = [

@@ -9,6 +9,7 @@ const dockApps = [
   { id: 'discord', icon: 'fa-discord', name: 'Discord', gradient: 'linear-gradient(135deg, #5865f2, #7289da)', url: 'https://discord.gg/xwH3u8EGh3' },
   { id: 'linkedin', icon: 'fa-linkedin-in', name: 'LinkedIn', gradient: 'linear-gradient(135deg, #0077b5, #0a66c2)', url: 'https://linkedin.com' },
   { id: 'contact', icon: 'fa-envelope', name: 'Contact', color: '#00a8ff' },
+  { id: 'terminal', icon: 'fa-terminal', name: 'Terminal', gradient: 'linear-gradient(135deg, #2d2d2d, #1a1a1a)' },
   { id: 'settings', icon: 'fa-cog', name: 'Settings', color: '#666' },
 ];
 
