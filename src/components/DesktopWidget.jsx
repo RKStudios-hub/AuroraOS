@@ -53,7 +53,7 @@ export default function DesktopWidget({ toggleMusic, isMusicPlaying }) {
   return (
     <>
       {/* Music Widget */}
-      <div className="fixed bottom-4 left-4 z-20">
+      <div className="fixed bottom-2 left-4 z-20">
         <div className="flex items-center gap-3 bg-black/40 backdrop-blur-md rounded-xl px-4 py-3 border border-white/10">
           <img 
             src="/music.png" 

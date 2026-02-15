@@ -15,7 +15,10 @@ export default function Dock({ onOpenApp, showNotification }) {
   const [trashClickCount, setTrashClickCount] = useState(0);
 
   const handleClick = (app) => {
-    if (app.url) {
+    const socialApps = ['facebook', 'instagram', 'whatsapp', 'discord', 'linkedin'];
+    if (socialApps.includes(app.id)) {
+      showNotification("You know i'm still working on that...", 'someone');
+    } else if (app.url) {
       window.open(app.url, '_blank');
     } else {
       onOpenApp(app.id);

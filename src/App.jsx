@@ -50,6 +50,7 @@ function App() {
     contact: 'Contact',
     game: 'Games',
     terminal: 'Terminal',
+    paint: 'Paint - RK Studio',
   };
 
   useEffect(() => {
@@ -109,6 +110,17 @@ function App() {
         isMinimized: false
       }
     }));
+  }, []);
+
+  const restoreWindow = useCallback((windowId) => {
+    setOpenWindows(prev => ({
+      ...prev,
+      [windowId]: {
+        ...prev[windowId],
+        isMinimized: false
+      }
+    }));
+    setActiveWindow(windowId);
   }, []);
 
   const showContextMenu = useCallback((x, y) => {
@@ -171,7 +183,7 @@ function App() {
             toggleMusic={toggleMusic}
             isMusicPlaying={isMusicPlaying}
           />
-          <Dock onOpenApp={openWindow} showNotification={showNotification} />
+          <Dock onOpenApp={openWindow} showNotification={showNotification} openWindows={openWindows} restoreWindow={restoreWindow} minimizeWindow={minimizeWindow} />
           
           <AnimatePresence>
             {contextMenu.show && (
