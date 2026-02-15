@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState } from 'react';
 
 const dockApps = [
   { id: 'facebook', icon: 'fa-facebook-f', name: 'Facebook', gradient: 'linear-gradient(135deg, #1877f2, #405de6)', url: 'https://www.facebook.com' },
@@ -13,13 +14,28 @@ const dockApps = [
   { id: 'settings', icon: 'fa-cog', name: 'Settings', color: '#666' },
 ];
 
-export default function Dock({ onOpenApp }) {
+export default function Dock({ onOpenApp, showNotification }) {
+  const [trashClickCount, setTrashClickCount] = useState(0);
+
   const handleClick = (app) => {
     if (app.url) {
       window.open(app.url, '_blank');
     } else {
       onOpenApp(app.id);
     }
+  };
+
+  const handleTrashClick = () => {
+    setTrashClickCount(prev => prev + 1);
+    let message;
+    if (trashClickCount === 0) {
+      message = "trying to delete something ?";
+    } else if (trashClickCount === 1) {
+      message = "still trying to delete something ?";
+    } else {
+      message = "again ?";
+    }
+    showNotification(message);
   };
 
   return (
@@ -94,6 +110,7 @@ export default function Dock({ onOpenApp }) {
           <motion.button
             whileHover={{ scale: 1.3, y: -15 }}
             whileTap={{ scale: 0.9 }}
+            onClick={handleTrashClick}
             className="w-12 h-12 rounded-xl flex items-center justify-center text-xl"
             style={{ 
               background: 'linear-gradient(135deg, #666, #444)',

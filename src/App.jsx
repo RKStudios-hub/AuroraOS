@@ -6,12 +6,14 @@ import Dock from './components/Dock';
 import BootScreen from './components/BootScreen';
 import CustomCursor from './components/CustomCursor';
 import ContextMenu from './components/ContextMenu';
+import Notification from './components/Notification';
 
 function App() {
   const [isBooting, setIsBooting] = useState(true);
   const [openWindows, setOpenWindows] = useState({});
   const [activeWindow, setActiveWindow] = useState(null);
   const [contextMenu, setContextMenu] = useState({ show: false, x: 0, y: 0 });
+  const [notification, setNotification] = useState(null);
 
   const windowTitles = {
     about: 'About',
@@ -87,6 +89,11 @@ function App() {
     setContextMenu({ show: false, x: 0, y: 0 });
   }, []);
 
+  const showNotification = useCallback((message) => {
+    setNotification(message);
+    setTimeout(() => setNotification(null), 3000);
+  }, []);
+
   useEffect(() => {
     if (contextMenu.show) {
       const handleClick = () => hideContextMenu();
@@ -115,7 +122,7 @@ function App() {
             activeWindow={activeWindow}
             showContextMenu={showContextMenu}
           />
-          <Dock onOpenApp={openWindow} />
+          <Dock onOpenApp={openWindow} showNotification={showNotification} />
           
           <AnimatePresence>
             {contextMenu.show && (
@@ -124,6 +131,15 @@ function App() {
                 y={contextMenu.y} 
                 onClose={hideContextMenu}
                 openWindow={openWindow}
+              />
+            )}
+          </AnimatePresence>
+
+          <AnimatePresence>
+            {notification && (
+              <Notification 
+                message={notification} 
+                onClose={() => setNotification(null)} 
               />
             )}
           </AnimatePresence>
