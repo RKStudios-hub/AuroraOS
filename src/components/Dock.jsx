@@ -1,18 +1,26 @@
 import { motion } from 'framer-motion';
 
 const dockApps = [
-  { id: 'facebook', icon: 'fa-facebook-f', name: 'Facebook', gradient: 'linear-gradient(135deg, #1877f2, #405de6)' },
+  { id: 'facebook', icon: 'fa-facebook-f', name: 'Facebook', gradient: 'linear-gradient(135deg, #1877f2, #405de6)', url: 'https://www.facebook.com' },
   { id: 'design', icon: 'fa-palette', name: 'Design', color: '#ff6b6b' },
-  { id: 'instagram', icon: 'fa-instagram', name: 'Instagram', gradient: 'linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)' },
+  { id: 'instagram', icon: 'fa-instagram', name: 'Instagram', gradient: 'linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)', url: 'https://instagram.com' },
   { id: 'game', icon: 'fa-gamepad', name: 'Games', color: '#00a8ff' },
-  { id: 'whatsapp', icon: 'fa-whatsapp', name: 'WhatsApp', gradient: 'linear-gradient(135deg, #25d366, #128c7e)' },
-  { id: 'discord', icon: 'fa-discord', name: 'Discord', gradient: 'linear-gradient(135deg, #5865f2, #7289da)' },
-  { id: 'linkedin', icon: 'fa-linkedin-in', name: 'LinkedIn', gradient: 'linear-gradient(135deg, #0077b5, #0a66c2)' },
+  { id: 'whatsapp', icon: 'fa-whatsapp', name: 'WhatsApp', gradient: 'linear-gradient(135deg, #25d366, #128c7e)', url: 'https://whatsapp.com' },
+  { id: 'discord', icon: 'fa-discord', name: 'Discord', gradient: 'linear-gradient(135deg, #5865f2, #7289da)', url: 'https://discord.gg/xwH3u8EGh3' },
+  { id: 'linkedin', icon: 'fa-linkedin-in', name: 'LinkedIn', gradient: 'linear-gradient(135deg, #0077b5, #0a66c2)', url: 'https://linkedin.com' },
   { id: 'contact', icon: 'fa-envelope', name: 'Contact', color: '#00a8ff' },
   { id: 'settings', icon: 'fa-cog', name: 'Settings', color: '#666' },
 ];
 
 export default function Dock({ onOpenApp }) {
+  const handleClick = (app) => {
+    if (app.url) {
+      window.open(app.url, '_blank');
+    } else {
+      onOpenApp(app.id);
+    }
+  };
+
   return (
     <div className="fixed bottom-2 left-1/2 -translate-x-1/2 z-50">
       {/* Dock container */}
@@ -42,7 +50,7 @@ export default function Dock({ onOpenApp }) {
                 y: -15,
               }}
               whileTap={{ scale: 0.9 }}
-              onClick={() => onOpenApp(app.id)}
+              onClick={() => handleClick(app)}
               className="w-12 h-12 rounded-xl flex items-center justify-center text-xl transition-all relative group"
               style={{ 
                 background: app.gradient || (app.color === '#00a8ff' 

@@ -67,7 +67,7 @@ export default function Window({
         bounds="parent"
         dragHandleClassName="window-drag-handle"
         enableResizing={!isMaximized}
-        enabledragging={!isMaximized}
+        disableDragging={isMaximized}
         size={getWindowSize()}
         position={getWindowPosition()}
         className={`fixed z-30 overflow-hidden ${isMaximized ? 'rounded-none' : 'rounded-xl'}`}

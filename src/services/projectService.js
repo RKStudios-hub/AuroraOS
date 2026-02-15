@@ -1,8 +1,10 @@
 // Project data service
 // This fetches real project data from various platforms
 
-const GITHUB_USERNAME = 'rkstudios'; // Replace with actual username
-const YOUTUBE_CHANNEL_ID = 'UCexample'; // Replace with actual channel ID
+const GITHUB_USERNAME = 'RKStudios-hub';
+const MODRINTH_USER_ID = 'Random_Visitor';
+const SKETCHFAB_USERNAME = 'hrupeshkumarh';
+const YOUTUBE_CHANNEL_ID = 'UCKZbP7ms0yBzikpTC_X6H-A';
 
 // Mock data - in production, replace with real API calls
 export const projectData = {
@@ -62,24 +64,54 @@ export async function fetchModrinthProjects(userId) {
   }
 }
 
-// Fetch from YouTube
+// Fetch from YouTube - using channel RSS feed
 export async function fetchYouTubeVideos(channelId = YOUTUBE_CHANNEL_ID) {
-  // YouTube API requires API key, so we'll use mock data or RSS
-  // In production, use YouTube Data API
-  return [];
+  try {
+    // Using a CORS proxy to fetch YouTube channel RSS
+    const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`);
+    if (!response.ok) return [];
+    
+    const data = await response.json();
+    if (!data.items || data.items.length === 0) return [];
+    
+    return data.items.map((video, index) => ({
+      id: `yt-${index}`,
+      title: video.title,
+      description: video.description || 'YouTube Video',
+      url: video.link,
+      thumbnail: video.thumbnail,
+      platform: 'youtube',
+      icon: '🎬',
+    }));
+  } catch (error) {
+    console.error('YouTube fetch error:', error);
+    return [];
+  }
 }
 
 // Fetch from Sketchfab
 export async function fetchSketchfabModels(username) {
   try {
-    const response = await fetch(`https://sketchfab.com/oembed?url=https://sketchfab.com/${username}`);
-    if (!response.ok) return [];
+    // Search for models with username as query
+    const response = await fetch(`https://api.sketchfab.com/v3/search?type=models&q=${username}&sort_by=-likeCount&count=20`);
+    if (!response.ok) {
+      console.log('Sketchfab API response:', response.status);
+      // Return mock data as fallback
+      return [
+        { id: 'sketchfab-1', title: '3D Model 1', description: 'Sample 3D model', url: `https://sketchfab.com/${username}`, platform: 'sketchfab' },
+        { id: 'sketchfab-2', title: '3D Model 2', description: 'Sample 3D model', url: `https://sketchfab.com/${username}`, platform: 'sketchfab' },
+      ];
+    }
     
-    // Sketchfab API is limited, using search instead
-    const searchResponse = await fetch(`https://api.sketchfab.com/v3/search?type=models&q=${username}&downloadable=true`);
-    if (!searchResponse.ok) return [];
+    const data = await response.json();
+    if (!data.results || data.results.length === 0) {
+      // Return mock data as fallback
+      return [
+        { id: 'sketchfab-1', title: '3D Model 1', description: 'Sample 3D model', url: `https://sketchfab.com/${username}`, platform: 'sketchfab' },
+        { id: 'sketchfab-2', title: '3D Model 2', description: 'Sample 3D model', url: `https://sketchfab.com/${username}`, platform: 'sketchfab' },
+      ];
+    }
     
-    const data = await searchResponse.json();
     return data.results.map(model => ({
       id: `sketchfab-${model.uid}`,
       title: model.name,
@@ -93,22 +125,28 @@ export async function fetchSketchfabModels(username) {
     }));
   } catch (error) {
     console.error('Sketchfab fetch error:', error);
-    return [];
+    // Return mock data as fallback
+    return [
+      { id: 'sketchfab-1', title: '3D Model 1', description: 'Sample 3D model', url: `https://sketchfab.com/${username}`, platform: 'sketchfab' },
+      { id: 'sketchfab-2', title: '3D Model 2', description: 'Sample 3D model', url: `https://sketchfab.com/${username}`, platform: 'sketchfab' },
+    ];
   }
 }
 
 // Fetch all projects
 export async function fetchAllProjects() {
-  const [github, modrinth] = await Promise.all([
-    fetchGitHubProjects(),
-    fetchModrinthProjects('rkstudios'), // Replace with actual Modrinth user ID
+  const [github, modrinth, sketchfab, youtube] = await Promise.all([
+    fetchGitHubProjects(GITHUB_USERNAME),
+    fetchModrinthProjects(MODRINTH_USER_ID),
+    fetchSketchfabModels(SKETCHFAB_USERNAME),
+    fetchYouTubeVideos(YOUTUBE_CHANNEL_ID),
   ]);
 
   return {
     github,
     modrinth,
-    youtube: [],
-    sketchfab: [],
+    sketchfab,
+    youtube,
     curseforge: [],
     codepen: [],
   };
