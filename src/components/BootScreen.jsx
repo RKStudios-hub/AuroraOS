@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 const bootMessages = [
   { text: '', delay: 0 },
   { text: 'Apple', delay: 100 },
-  { text: '██████▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ 80%', delay: 200 },
+  { text: '██████▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ 80%', delay: 200 },
   { text: '', delay: 300 },
   { text: 'Mac OS RK', delay: 400 },
   { text: '', delay: 500 },

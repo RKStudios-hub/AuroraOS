@@ -1,12 +1,14 @@
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
-export default function Notification({ message, onClose }) {
+export default function Notification({ message, type, onClose }) {
+  const isRecycleBin = type === 'recycle';
+
   return (
     <motion.div
       initial={{ y: 100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      exit={{ y: 100, opacity: 0 }}
-      transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+      exit={{ y: 50, opacity: 0 }}
+      transition={{ duration: 0.5 }}
       className="fixed z-[100] max-w-sm rounded-lg overflow-hidden"
       style={{
         bottom: '90px',
@@ -16,11 +18,24 @@ export default function Notification({ message, onClose }) {
       }}
     >
       <div className="p-4 flex items-start gap-3">
-        <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(135deg, #666, #444)' }}>
-          <i className="fas fa-trash text-white text-sm" />
-        </div>
+        {isRecycleBin ? (
+          <div 
+            className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
+            style={{ background: 'linear-gradient(135deg, #666, #444)' }}
+          >
+            <i className="fas fa-trash text-white text-sm" />
+          </div>
+        ) : (
+          <img 
+            src="/profile.jpg" 
+            alt="Someone" 
+            className="w-10 h-10 rounded-full flex-shrink-0 object-cover"
+          />
+        )}
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold" style={{ color: '#1a1a1a' }}>Recycle Bin</p>
+          <p className="text-sm font-semibold" style={{ color: '#1a1a1a' }}>
+            {isRecycleBin ? 'Recycle Bin' : 'Someone'}
+          </p>
           <p className="text-xs mt-0.5" style={{ color: '#666' }}>{message}</p>
         </div>
         <button
