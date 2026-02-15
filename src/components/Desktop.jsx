@@ -9,6 +9,7 @@ import ContactWindow from '../windows/ContactWindow';
 import GameWindow from '../windows/GameWindow';
 import TerminalWindow from '../windows/TerminalWindow';
 import PaintWindow from '../windows/PaintWindow';
+import BrowserWindow from '../windows/BrowserWindow';
 
 const windowComponents = {
   about: AboutWindow,
@@ -18,11 +19,13 @@ const windowComponents = {
   game: GameWindow,
   terminal: TerminalWindow,
   paint: PaintWindow,
+  browser: BrowserWindow,
 };
 
 const desktopApps = [
   { id: 'about', icon: 'fa-user', label: 'About Me', color: 'from-purple-400 to-purple-600' },
   { id: 'projects', icon: 'fa-folder', label: 'Projects', color: 'from-blue-400 to-blue-600' },
+  { id: 'browser', icon: 'fa-globe', label: 'Browser', color: 'from-blue-400 to-cyan-400' },
   { id: 'design', icon: 'fa-palette', label: 'Design', color: 'from-pink-400 to-pink-600' },
   { id: 'paint', icon: 'fa-paintbrush', label: 'Paint', color: 'from-cyan-400 to-cyan-600' },
   { id: 'contact', icon: 'fa-envelope', label: 'Contact', color: 'from-green-400 to-green-600' },

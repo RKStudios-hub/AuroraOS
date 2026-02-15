@@ -10,6 +10,7 @@ const windowConfigs = {
   game: { title: 'Games', iconClass: 'fa-gamepad', defaultWidth: 450, defaultHeight: 400 },
   terminal: { title: 'Terminal', iconClass: 'fa-terminal', defaultWidth: 600, defaultHeight: 400 },
   paint: { title: 'Paint - RK Studio', iconClass: 'fa-paintbrush', defaultWidth: 1000, defaultHeight: 650 },
+  browser: { title: 'Browser', iconClass: 'fa-globe', defaultWidth: 900, defaultHeight: 650 },
 };
 
 export default function Window({ 

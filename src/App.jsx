@@ -51,6 +51,7 @@ function App() {
     game: 'Games',
     terminal: 'Terminal',
     paint: 'Paint - RK Studio',
+    browser: 'Browser',
   };
 
   useEffect(() => {
@@ -171,7 +172,7 @@ function App() {
 
       {!isBooting && !showStartScreen && (
         <>
-          <MenuBar activeWindow={activeWindow} windowTitles={windowTitles} />
+          <MenuBar activeWindow={activeWindow} windowTitles={windowTitles} musicRef={musicRef} isMusicPlaying={isMusicPlaying} />
           <Desktop 
             openWindows={openWindows}
             openWindow={openWindow}

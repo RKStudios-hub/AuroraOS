@@ -8,11 +8,11 @@ const beliefs = [
 ];
 
 const skills = [
-  { icon: 'fa-html5', name: 'HTML', color: '#e34f26' },
-  { icon: 'fa-css3-alt', name: 'CSS', color: '#1572b6' },
-  { icon: 'fa-js', name: 'JavaScript', color: '#f7df1e' },
-  { icon: 'fa-cube', name: '3D Design', color: '#ff6b6b' },
-  { icon: 'fa-palette', name: 'Graphics', color: '#9b59b6' },
+  { icon: 'fa-html5', name: 'HTML', color: '#e34f26', prefix: 'fab' },
+  { icon: 'fa-css3-alt', name: 'CSS', color: '#1572b6', prefix: 'fab' },
+  { icon: 'fa-js', name: 'JavaScript', color: '#f7df1e', prefix: 'fab' },
+  { icon: 'fa-box-open', name: '3D Design', color: '#ff6b6b', prefix: 'fas' },
+  { icon: 'fa-palette', name: 'Graphics', color: '#9b59b6', prefix: 'fas' },
 ];
 
 export default function AboutWindow() {
@@ -152,7 +152,7 @@ export default function AboutWindow() {
               className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium"
               style={{ background: `${skill.color}15`, color: skill.color }}
             >
-              <i className={`fab ${skill.icon}`} />
+              <i className={`${skill.prefix} ${skill.icon}`} />
               {skill.name}
             </motion.span>
           ))}

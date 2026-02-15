@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const dockApps = [
   { id: 'facebook', icon: 'fa-facebook-f', name: 'Facebook', gradient: 'linear-gradient(135deg, #1877f2, #405de6)', url: 'https://www.facebook.com' },
@@ -13,6 +13,12 @@ const dockApps = [
 
 export default function Dock({ onOpenApp, showNotification }) {
   const [trashClickCount, setTrashClickCount] = useState(0);
+  const [terminalBouncing, setTerminalBouncing] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setTerminalBouncing(true), 120000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleClick = (app) => {
     const socialApps = ['facebook', 'instagram', 'whatsapp', 'discord', 'linkedin'];
@@ -20,6 +26,9 @@ export default function Dock({ onOpenApp, showNotification }) {
       showNotification("You know i'm still working on that...", 'someone');
     } else if (app.url) {
       window.open(app.url, '_blank');
+    } else if (app.id === 'terminal') {
+      setTerminalBouncing(false);
+      onOpenApp(app.id);
     } else {
       onOpenApp(app.id);
     }
@@ -47,9 +56,9 @@ export default function Dock({ onOpenApp, showNotification }) {
         transition={{ delay: 0.5, type: 'spring' }}
         className="flex items-end gap-1 px-3 py-2 rounded-2xl"
         style={{ 
-          background: 'rgba(255, 255, 255, 0.15)',
+          background: 'rgba(0, 0, 0, 0.4)',
           backdropFilter: 'blur(20px)',
-          border: '1px solid rgba(255, 255, 255, 0.2)',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
           boxShadow: '0 10px 40px rgba(0,0,0,0.3)',
         }}
       >
@@ -58,8 +67,15 @@ export default function Dock({ onOpenApp, showNotification }) {
             key={app.id}
             className="relative"
             initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.6 + index * 0.05 }}
+            animate={{ 
+              scale: app.id === 'terminal' && terminalBouncing ? [1, 1.08, 1] : 1,
+              y: app.id === 'terminal' && terminalBouncing ? [0, -6, 0] : 0,
+            }}
+            transition={{ 
+              delay: 0.6 + index * 0.05,
+              y: app.id === 'terminal' && terminalBouncing ? { repeat: Infinity, duration: 1.2, ease: "easeInOut" } : {},
+              scale: app.id === 'terminal' && terminalBouncing ? { repeat: Infinity, duration: 1.2, ease: "easeInOut" } : {},
+            }}
             style={app.wide ? { width: '108px' } : {}}
           >
             <motion.button
