@@ -1,4 +1,68 @@
 import { useState, useEffect, useRef } from 'react';
+import { fetchGitHubProjects } from '../services/projectService';
+
+const GITHUB_USERNAME = 'RKStudios-hub';
+
+const colors = {
+  reset: '#58a6ff',
+  green: '#3fb950',
+  yellow: '#d29922',
+  cyan: '#58a6ff',
+  magenta: '#bc8cff',
+  red: '#f85149',
+  white: '#ffffff',
+  gray: '#8b949e',
+  orange: '#f0883e',
+  blue: '#58a6ff',
+  pink: '#db61a2',
+};
+
+const parseColoredText = (text) => {
+  const parts = [];
+  const lines = text.split('\n');
+  
+  lines.forEach((line, lineIndex) => {
+    const coloredParts = line.match(/(\x1b\[[0-9;]*m[^\x1b]*|\x1b\[[0-9;]*m|[^\x1b]+)/g) || [line];
+    
+    coloredParts.forEach((part) => {
+      let color = colors.reset;
+      if (part.includes('\x1b[32m')) color = colors.green;
+      else if (part.includes('\x1b[33m')) color = colors.yellow;
+      else if (part.includes('\x1b[36m')) color = colors.cyan;
+      else if (part.includes('\x1b[35m')) color = colors.magenta;
+      else if (part.includes('\x1b[31m')) color = colors.red;
+      else if (part.includes('\x1b[37m')) color = colors.white;
+      else if (part.includes('\x1b[90m')) color = colors.gray;
+      else if (part.includes('\x1b[38;5;208m')) color = colors.orange;
+      else if (part.includes('\x1b[38;5;39m')) color = colors.blue;
+      else if (part.includes('\x1b[38;5;200m')) color = colors.pink;
+      
+      const cleanPart = part.replace(/\x1b\[[0-9;]*m/g, '');
+      if (cleanPart) {
+        parts.push({ text: cleanPart, color });
+      }
+    });
+    
+    if (lineIndex < lines.length - 1) {
+      parts.push({ text: '\n', color: colors.reset });
+    }
+  });
+  
+  return parts;
+};
+
+const formatColoredOutput = (text) => {
+  let formatted = text
+    .replace(/^(\d+\.)/gm, '\x1b[38;5;39m$1\x1b[0m')
+    .replace(/(https?:\/\/[^\s]+)/g, '\x1b[36m$1\x1b[0m')
+    .replace(/\|/g, '\x1b[90m|\x1b[0m')
+    .replace(/(RK|Studio|RK Studios|Rupesh)/g, '\x1b[38;5;39m$1\x1b[0m')
+    .replace(/(HTML|CSS|JavaScript|React)/g, '\x1b[32m$1\x1b[0m')
+    .replace(/(High School|Developer|Designer|Artist)/g, '\x1b[33m$1\x1b[0m')
+    .replace(/(Lowpoly|3D|Model)/g, '\x1b[38;5;208m$1\x1b[0m')
+    .replace(/(GitHub|YouTube|Email)/g, '\x1b[35m$1\x1b[0m');
+  return formatted;
+};
 
 const commands = {
   help: 'Show all available commands',
@@ -69,15 +133,24 @@ const matrixChars = 'アイウエオカキクケコサシスセソタチツテ�
 
 export default function TerminalWindow() {
   const [history, setHistory] = useState([
-    { type: 'output', text: 'Welcome to RK Studios Terminal v1.0' },
-    { type: 'output', text: 'Type "help" for available commands.' },
+    { type: 'output', text: '\x1b[38;5;39mWelcome to RK Studios Terminal v1.0\x1b[0m' },
+    { type: 'output', text: 'Type \x1b[32mhelp\x1b[0m for available commands.' },
     { type: 'output', text: '' },
   ]);
   const [input, setInput] = useState('');
   const [currentPath, setCurrentPath] = useState('~');
   const [isMatrixMode, setIsMatrixMode] = useState(false);
+  const [githubProjects, setGithubProjects] = useState([]);
   const inputRef = useRef(null);
   const outputRef = useRef(null);
+
+  useEffect(() => {
+    async function loadGithubProjects() {
+      const projects = await fetchGitHubProjects(GITHUB_USERNAME);
+      setGithubProjects(projects);
+    }
+    loadGithubProjects();
+  }, []);
 
   useEffect(() => {
     if (outputRef.current) {
@@ -106,87 +179,95 @@ export default function TerminalWindow() {
 
     switch (command) {
       case 'help':
-        newHistory.push({ type: 'output', text: 'Available commands:' });
+        newHistory.push({ type: 'output', text: '\x1b[32mAvailable commands:\x1b[0m' });
         Object.entries(commands).forEach(([k, v]) => {
-          newHistory.push({ type: 'output', text: `  ${k.padEnd(15)} - ${v}` });
+          newHistory.push({ type: 'output', text: `  \x1b[38;5;39m${k.padEnd(15)}\x1b[0m - ${v}` });
         });
         break;
 
       case 'about':
-        newHistory.push({ type: 'output', text: `Name: Rupesh Kumar
-Alias: RK Studios
-Role: Developer | Graphics Designer | Lowpoly 3D Artist
-Status: High School Student
-Mission: Building real-world projects using core web fundamentals.` });
+        newHistory.push({ type: 'output', text: `\x1b[38;5;39mName:\x1b[0m Rupesh Kumar
+\x1b[38;5;39mAlias:\x1b[0m RK Studios
+\x1b[38;5;39mRole:\x1b[0m \x1b[33mDeveloper\x1b[0m | \x1b[33mGraphics Designer\x1b[0m | \x1b[38;5;208mLowpoly 3D Artist\x1b[0m
+\x1b[38;5;39mStatus:\x1b[0m \x1b[33mHigh School Student\x1b[0m
+\x1b[38;5;39mMission:\x1b[0m Building real-world projects using core web fundamentals.` });
         break;
 
       case 'skills':
-        newHistory.push({ type: 'output', text: `Frontend:
-- HTML
-- CSS
-- JavaScript
+        newHistory.push({ type: 'output', text: `\x1b[32mFrontend:\x1b[0m
+- \x1b[32mHTML\x1b[0m
+- \x1b[32mCSS\x1b[0m
+- \x1b[32mJavaScript\x1b[0m
 
-Design:
+\x1b[35mDesign:\x1b[0m
 - Graphic Design
 - Logo Design
 - UI Mockups
 
-3D:
+\x1b[38;5;208m3D:\x1b[0m
 - Lowpoly Modeling
 - Stylized Assets
 
-Learning:
+\x1b[33mLearning:\x1b[0m
 - React
 - Advanced Animations
 - Creative Coding` });
         break;
 
       case 'projects':
-        newHistory.push({ type: 'output', text: `1. APEX Securities - Security Landing Page
-2. Custom Web OS UI
-3. Animated Intro Website
-4. FPS Web Game
-5. Fantasy Minecraft Series` });
+        if (githubProjects.length > 0) {
+          const projectList = githubProjects.map((p, i) => {
+            const num = `\x1b[38;5;39m${i + 1}.\x1b[0m`;
+            const title = `\x1b[32m${p.title}\x1b[0m`;
+            const desc = p.description ? `\x1b[90m- ${p.description}\x1b[0m` : '';
+            const lang = p.tags?.[0] ? `\x1b[36m[${p.tags[0]}]\x1b[0m` : '';
+            return `${num} ${title} ${lang}\n   ${desc}`;
+          }).join('\n');
+          newHistory.push({ type: 'output', text: projectList });
+        } else {
+          newHistory.push({ type: 'output', text: `\x1b[33mLoading projects from GitHub...\x1b[0m\nOr visit: \x1b[36mgithub.com/${GITHUB_USERNAME}\x1b[0m` });
+        }
         break;
 
       case 'art':
-        newHistory.push({ type: 'output', text: `- Pencil Sketches
-- Stylized Portraits
-- YouTube Sketch Videos
-- Character Art` });
+        newHistory.push({ type: 'output', text: `\x1b[38;5;208m-\x1b[0m Pencil Sketches
+\x1b[38;5;208m-\x1b[0m Stylized Portraits
+\x1b[38;5;208m-\x1b[0m YouTube Sketch Videos
+\x1b[38;5;208m-\x1b[0m Character Art` });
         break;
 
       case '3d':
-        newHistory.push({ type: 'output', text: `- Lowpoly Medieval Assets
-- RK Bot Action Figure
-- Chandrayaan-2 Model
-- Mini Gaming Room Setup` });
+        newHistory.push({ type: 'output', text: `\x1b[38;5;208m-\x1b[0m Lowpoly Medieval Assets
+\x1b[38;5;208m-\x1b[0m RK Bot Action Figure
+\x1b[38;5;208m-\x1b[0m Chandrayaan-2 Model
+\x1b[38;5;208m-\x1b[0m Mini Gaming Room Setup` });
         break;
 
       case 'contact':
-        newHistory.push({ type: 'output', text: `Email: rkstudios@example.com
-GitHub: github.com/RKStudios
-YouTube: RK Studios` });
+        newHistory.push({ type: 'output', text: `\x1b[35mEmail:\x1b[0m rkstudios@example.com
+\x1b[35mGitHub:\x1b[0m \x1b[36mgithub.com/RKStudios\x1b[0m
+\x1b[35mYouTube:\x1b[0m RK Studios` });
         break;
 
       case 'resume':
-        newHistory.push({ type: 'output', text: 'Resume not available. Contact me to get a copy!' });
+        newHistory.push({ type: 'output', text: '\x1b[33mResume not available.\x1b[0m Contact me to get a copy!' });
         break;
 
       case 'whoami':
-        newHistory.push({ type: 'output', text: 'You are currently exploring RK Studios.\nCuriosity level: 100%' });
+        newHistory.push({ type: 'output', text: `You are currently exploring \x1b[38;5;39mRK Studios\x1b[0m.
+\x1b[32mCuriosity level: 100%\x1b[0m` });
         break;
 
       case 'coffee':
-        newHistory.push({ type: 'output', text: 'Brewing creativity...\n☕ + 💻 = 🚀' });
+        newHistory.push({ type: 'output', text: '\x1b[33mBrewing creativity...\x1b[0m\n☕ + 💻 = 🚀' });
         break;
 
       case 'motivation':
-        newHistory.push({ type: 'output', text: '"Learning fast. Creating daily. Improving constantly."' });
+        newHistory.push({ type: 'output', text: `"\x1b[32mLearning fast. Creating daily. Improving constantly.\x1b[0m"` });
         break;
 
       case 'matrix':
-        newHistory.push({ type: 'output', text: 'Entering the Matrix...' });
+        newHistory.push({ type: 'output', text: '\x1b[32mEntering the Matrix...\x1b[0m' });
         setIsMatrixMode(true);
         let matrixInterval = 0;
         let count = 0;
@@ -194,7 +275,7 @@ YouTube: RK Studios` });
           if (count >= 20) {
             clearInterval(interval);
             setIsMatrixMode(false);
-            newHistory.push({ type: 'output', text: 'Exited Matrix.' });
+            newHistory.push({ type: 'output', text: '\x1b[32mExited Matrix.\x1b[0m' });
             setHistory([...newHistory]);
             return;
           }
@@ -206,32 +287,32 @@ YouTube: RK Studios` });
         return;
 
       case 'experience':
-        newHistory.push({ type: 'output', text: `Freelance Projects
+        newHistory.push({ type: 'output', text: `\x1b[33mFreelance Projects\x1b[0m
 Personal Portfolio Builds
-UI/UX Experiments
+\x1b[35mUI/UX Experiments\x1b[0m
 Game UI Concepts` });
         break;
 
       case 'timeline':
-        newHistory.push({ type: 'output', text: `2023 - Started Web Development
-2024 - Built Multiple Real Projects
-2025 - Exploring Advanced UI + 3D` });
+        newHistory.push({ type: 'output', text: `\x1b[38;5;39m2023\x1b[0m - Started Web Development
+\x1b[38;5;39m2024\x1b[0m - Built Multiple Real Projects
+\x1b[38;5;39m2025\x1b[0m - Exploring Advanced UI + 3D` });
         break;
 
       case 'secret':
-        newHistory.push({ type: 'output', text: 'You found an easter egg 👀\nFuture CEO loading...' });
+        newHistory.push({ type: 'output', text: '\x1b[38;5;208mYou found an easter egg 👀\x1b[0m\n\x1b[33mFuture CEO loading...\x1b[0m' });
         break;
 
       case 'sudo':
         if (arg === 'hire-me') {
-          newHistory.push({ type: 'output', text: 'Permission granted.\nOpening future collaboration.exe...' });
+          newHistory.push({ type: 'output', text: '\x1b[32mPermission granted.\x1b[0m\nOpening future collaboration.exe...' });
         } else {
           newHistory.push({ type: 'error', text: 'sudo: permission denied: you are not the admin' });
         }
         break;
 
       case 'ls':
-        newHistory.push({ type: 'output', text: getDirContents() || 'about.txt  skills.json  contact.sh  resume.pdf  projects/  art/  3d/' });
+        newHistory.push({ type: 'output', text: '\x1b[38;5;39mabout.txt\x1b[0m  \x1b[38;5;39mskills.json\x1b[0m  \x1b[38;5;39mcontact.sh\x1b[0m  \x1b[38;5;39mresume.pdf\x1b[0m  \x1b[38;5;208mprojects/\x1b[0m  \x1b[38;5;208mart/\x1b[0m  \x1b[38;5;208m3d/\x1b[0m' });
         break;
 
       case 'cd':
@@ -275,7 +356,18 @@ Game UI Concepts` });
         break;
 
       case 'neofetch':
-        newHistory.push({ type: 'output', text: neofetchText });
+        newHistory.push({ type: 'output', text: `\x1b[38;5;39m                    rk@linux
+                   -----------
+                  OS:\x1b[0m RK-OS 1.0 (Custom)
+\x1b[38;5;39m                  Host:\x1b[0m Browser PC
+\x1b[38;5;39m                  Kernel:\x1b[0m JavaScript ES6
+\x1b[38;5;39m                  Shell:\x1b[0m bash 5.0
+\x1b[38;5;39m                  Terminal:\x1b[0m WebTerminal
+\x1b[38;5;39m                  CPU:\x1b[0m Virtual
+\x1b[38;5;39m                  Memory:\x1b[0m Unlimited
+\x1b[38;5;39m                  Uptime:\x1b[0m Always
+\x1b[38;5;39m                  DE:\x1b[0m RK Desktop
+\x1b[38;5;39m                  Theme:\x1b[0m Dark` });
         break;
 
       case 'clear':
@@ -291,7 +383,7 @@ Game UI Concepts` });
         break;
 
       default:
-        newHistory.push({ type: 'error', text: `command not found: ${command}` });
+        newHistory.push({ type: 'error', text: `\x1b[31mcommand not found: ${command}\x1b[0m` });
     }
 
     newHistory.push({ type: 'output', text: '' });
@@ -307,6 +399,13 @@ Game UI Concepts` });
 
   const handleClick = () => {
     inputRef.current?.focus();
+  };
+
+  const renderOutput = (text) => {
+    const parts = parseColoredText(text);
+    return parts.map((part, i) => (
+      <span key={i} style={{ color: part.color }}>{part.text}</span>
+    ));
   };
 
   return (
@@ -325,7 +424,7 @@ Game UI Concepts` });
             className={line.type === 'error' ? 'text-red-400' : line.type === 'command' ? 'text-white' : line.type === 'matrix' ? 'text-green-400' : 'whitespace-pre-wrap'}
             style={line.type === 'matrix' ? { fontFamily: 'monospace', fontSize: '10px' } : {}}
           >
-            {line.text}
+            {line.type === 'output' ? renderOutput(line.text) : line.text}
           </div>
         ))}
         <div className="flex items-center mt-1">

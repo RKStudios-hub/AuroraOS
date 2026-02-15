@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Rnd } from 'react-rnd';
 
@@ -8,6 +8,7 @@ const windowConfigs = {
   design: { title: 'Design Studio', iconClass: 'fa-palette', defaultWidth: 450, defaultHeight: 450 },
   contact: { title: 'Contact', iconClass: 'fa-envelope', defaultWidth: 400, defaultHeight: 450 },
   game: { title: 'Games', iconClass: 'fa-gamepad', defaultWidth: 450, defaultHeight: 400 },
+  terminal: { title: 'Terminal', iconClass: 'fa-terminal', defaultWidth: 600, defaultHeight: 400 },
 };
 
 export default function Window({ 
@@ -21,6 +22,7 @@ export default function Window({
 }) {
   const [isMaximized, setIsMaximized] = useState(false);
   const config = windowConfigs[id] || windowConfigs.about;
+  const containerRef = useRef(null);
 
   const handleClose = (e) => {
     e.stopPropagation();
@@ -41,14 +43,14 @@ export default function Window({
 
   const getWindowSize = () => {
     if (isMaximized) {
-      return { width: window.innerWidth - 8, height: window.innerHeight - 125 };
+      return { width: window.innerWidth - 16, height: window.innerHeight - 136 };
     }
     return undefined;
   };
 
   const getWindowPosition = () => {
     if (isMaximized) {
-      return { x: 4, y: 44 };
+      return { x: 8, y: 48 };
     }
     return undefined;
   };
@@ -64,12 +66,19 @@ export default function Window({
         }}
         minWidth={350}
         minHeight={300}
-        bounds="parent"
         dragHandleClassName="window-drag-handle"
         enableResizing={!isMaximized}
         disableDragging={isMaximized}
         size={getWindowSize()}
         position={getWindowPosition()}
+        dragBoundFunc={(pos) => {
+          if (isMaximized) return pos;
+          const maxY = window.innerHeight - 100;
+          return {
+            left: pos.x,
+            top: Math.max(40, Math.min(pos.y, maxY)),
+          };
+        }}
         className={`fixed z-30 overflow-hidden ${isMaximized ? 'rounded-none' : 'rounded-xl'}`}
         style={{
           background: 'rgba(255, 255, 255, 0.95)',

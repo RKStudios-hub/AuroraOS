@@ -9,7 +9,7 @@ const dockApps = [
   { id: 'discord', icon: 'fa-discord', name: 'Discord', gradient: 'linear-gradient(135deg, #5865f2, #7289da)', url: 'https://discord.gg/xwH3u8EGh3' },
   { id: 'linkedin', icon: 'fa-linkedin-in', name: 'LinkedIn', gradient: 'linear-gradient(135deg, #0077b5, #0a66c2)', url: 'https://linkedin.com' },
   { id: 'contact', icon: 'fa-envelope', name: 'Contact', color: '#00a8ff' },
-  { id: 'terminal', icon: 'fa-terminal', name: 'Terminal', gradient: 'linear-gradient(135deg, #2d2d2d, #1a1a1a)' },
+  { id: 'terminal', name: 'Terminal', gradient: 'linear-gradient(135deg, #2d2d2d, #1a1a1a)', icon: null },
   { id: 'settings', icon: 'fa-cog', name: 'Settings', color: '#666' },
 ];
 
@@ -64,7 +64,13 @@ export default function Dock({ onOpenApp }) {
                 boxShadow: '0 4px 15px rgba(0,0,0,0.3)',
               }}
             >
-              <i className={`${app.gradient ? 'fab' : 'fas'} ${app.icon} text-white`} />
+              {app.id === 'terminal' ? (
+                <svg viewBox="0 0 640 640" className="w-6 h-6 text-white">
+                  <path fill="currentColor" d="M73.4 182.6C60.9 170.1 60.9 149.8 73.4 137.3C85.9 124.8 106.2 124.8 118.7 137.3L278.7 297.3C291.2 309.8 291.2 330.1 278.7 342.6L118.7 502.6C106.2 515.1 85.9 515.1 73.4 502.6C60.9 490.1 60.9 469.8 73.4 457.3L210.7 320L73.4 182.6zM288 448L544 448C561.7 448 576 462.3 576 480C576 497.7 561.7 512 544 512L288 512C270.3 512 256 497.7 256 480C256 462.3 270.3 448 288 448z"/>
+                </svg>
+              ) : (
+                <i className={`${app.gradient ? 'fab' : 'fas'} ${app.icon} text-white`} />
+              )}
               
               {/* Tooltip */}
               <div 

@@ -1,3 +1,4 @@
+import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Window from './Window';
 import DesktopWidget from './DesktopWidget';
@@ -24,6 +25,83 @@ const desktopApps = [
   { id: 'contact', icon: 'fa-envelope', label: 'Contact', color: 'from-green-400 to-green-600' },
   { id: 'game', icon: 'fa-gamepad', label: 'Games', color: 'from-orange-400 to-orange-600' },
 ];
+
+const GRID_SIZE = 90;
+
+function DraggableIcon({ app, onOpen, index }) {
+  const [position, setPosition] = useState({ x: 0, y: index * GRID_SIZE });
+  const [isDragging, setIsDragging] = useState(false);
+  const dragStart = useRef({ x: 0, y: 0 });
+  const iconStart = useRef({ x: 0, y: 0 });
+
+  const snapToGrid = (value) => {
+    return Math.round(value / GRID_SIZE) * GRID_SIZE;
+  };
+
+  const handleMouseDown = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+    dragStart.current = { x: e.clientX, y: e.clientY };
+    iconStart.current = { ...position };
+  };
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      if (!isDragging) return;
+      const dx = e.clientX - dragStart.current.x;
+      const dy = e.clientY - dragStart.current.y;
+      setPosition({
+        x: Math.max(0, iconStart.current.x + dx),
+        y: Math.max(0, iconStart.current.y + dy),
+      });
+    };
+
+    const handleMouseUp = () => {
+      if (!isDragging) return;
+      setIsDragging(false);
+      const snapped = {
+        x: snapToGrid(position.x),
+        y: snapToGrid(position.y),
+      };
+      setPosition(snapped);
+    };
+
+    if (isDragging) {
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mouseup', handleMouseUp);
+    }
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isDragging, position]);
+
+  return (
+    <motion.div
+      className="absolute flex flex-col items-center gap-1 p-2 rounded-lg cursor-grab z-10"
+      style={{ 
+        left: 16 + position.x, 
+        top: 56 + position.y,
+        width: 80,
+        transition: isDragging ? 'none' : 'all 0.15s ease-out',
+      }}
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      whileHover={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
+      whileTap={{ scale: 0.95 }}
+      onMouseDown={handleMouseDown}
+      onDoubleClick={() => onOpen(app.id)}
+    >
+      <div 
+        className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl bg-gradient-to-br ${app.color} shadow-lg`}
+      >
+        <i className={`fas ${app.icon} text-white`} />
+      </div>
+      <span className="text-white text-xs text-center drop-shadow-md">{app.label}</span>
+    </motion.div>
+  );
+}
 
 export default function Desktop({ 
   openWindows, 
@@ -62,23 +140,14 @@ export default function Desktop({
       </video>
 
       {/* Desktop Icons */}
-      <div className="absolute top-14 left-4 flex flex-col gap-1 z-10">
-        {desktopApps.map((app, index) => (
-          <motion.button
-            key={app.id}
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.3 + index * 0.05 }}
-            onDoubleClick={() => openWindow(app.id)}
-            className="flex flex-col items-center gap-1 p-2 rounded-lg hover:bg-black/10 transition-colors w-20"
-          >
-            <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl bg-gradient-to-br ${app.color} shadow-lg`}>
-              <i className={`fas ${app.icon} text-white`} />
-            </div>
-            <span className="text-white text-xs text-center drop-shadow-md">{app.label}</span>
-          </motion.button>
-        ))}
-      </div>
+      {desktopApps.map((app, index) => (
+        <DraggableIcon 
+          key={app.id} 
+          app={app} 
+          index={index}
+          onOpen={openWindow}
+        />
+      ))}
 
       {/* Windows */}
       {sortedWindows.map(([id, window]) => {
