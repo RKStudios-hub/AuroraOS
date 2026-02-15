@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 
-export default function MenuBar() {
+export default function MenuBar({ activeWindow, windowTitles }) {
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
+
+  const windowTitle = activeWindow && windowTitles[activeWindow] ? windowTitles[activeWindow] : 'RK OS – Portfolio';
 
   return (
     <div className="fixed top-1 left-2 right-2 h-[36px] p-0.5 z-50 flex items-center justify-between text-white rounded-lg" style={{ background: 'rgba(32, 32, 43, 0.9)' }}>
@@ -17,9 +19,9 @@ export default function MenuBar() {
           <i className="fas fa-circle text-[#b4befe] text-sm" />
         </button>
         
-        {/* Active Window (placeholder) */}
+        {/* Active Window */}
         <div className="h-full px-2 flex items-center text-[#cdd6f4] text-xs font-semibold">
-          <span>RK OS – Portfolio</span>
+          <span>{windowTitle}</span>
         </div>
       </div>
 

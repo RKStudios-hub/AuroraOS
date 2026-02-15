@@ -13,6 +13,14 @@ function App() {
   const [activeWindow, setActiveWindow] = useState(null);
   const [contextMenu, setContextMenu] = useState({ show: false, x: 0, y: 0 });
 
+  const windowTitles = {
+    about: 'About',
+    projects: 'Projects',
+    design: 'Design Studio',
+    contact: 'Contact',
+    game: 'Games',
+  };
+
   useEffect(() => {
     const bootTimer = setTimeout(() => {
       setIsBooting(false);
@@ -96,7 +104,7 @@ function App() {
 
       {!isBooting && (
         <>
-          <MenuBar />
+          <MenuBar activeWindow={activeWindow} windowTitles={windowTitles} />
           <Desktop 
             openWindows={openWindows}
             openWindow={openWindow}

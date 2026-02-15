@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import Window from './Window';
+import DesktopWidget from './DesktopWidget';
 import AboutWindow from '../windows/AboutWindow';
 import ProjectsWindow from '../windows/ProjectsWindow';
 import DesignWindow from '../windows/DesignWindow';
@@ -32,6 +33,12 @@ export default function Desktop({
   showContextMenu
 }) {
   const windowList = Object.entries(openWindows).filter(([_, w]) => w.isOpen);
+
+  const sortedWindows = [...windowList].sort(([idA], [idB]) => {
+    if (idA === activeWindow) return 1;
+    if (idB === activeWindow) return -1;
+    return 0;
+  });
 
   return (
     <div 
@@ -72,7 +79,7 @@ export default function Desktop({
       </div>
 
       {/* Windows */}
-      {windowList.map(([id, window]) => {
+      {sortedWindows.map(([id, window]) => {
         const WindowComponent = windowComponents[id];
         return (
           <Window
@@ -88,6 +95,9 @@ export default function Desktop({
           </Window>
         );
       })}
+
+      {/* Desktop Widget */}
+      <DesktopWidget />
     </div>
   );
 }

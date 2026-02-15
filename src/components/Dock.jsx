@@ -1,13 +1,14 @@
 import { motion } from 'framer-motion';
 
 const dockApps = [
-  { id: 'finder', icon: 'fa-folder-open', name: 'Finder', color: '#00a8ff' },
-  { id: 'about', icon: 'fa-user', name: 'About', color: '#00a8ff' },
-  { id: 'projects', icon: 'fa-folder', name: 'Projects', color: '#00a8ff' },
+  { id: 'facebook', icon: 'fa-facebook-f', name: 'Facebook', gradient: 'linear-gradient(135deg, #1877f2, #405de6)' },
   { id: 'design', icon: 'fa-palette', name: 'Design', color: '#ff6b6b' },
-  { id: 'contact', icon: 'fa-envelope', name: 'Contact', color: '#00a8ff' },
+  { id: 'instagram', icon: 'fa-instagram', name: 'Instagram', gradient: 'linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)' },
   { id: 'game', icon: 'fa-gamepad', name: 'Games', color: '#00a8ff' },
-  { id: 'terminal', icon: 'fa-terminal', name: 'Terminal', color: '#333' },
+  { id: 'whatsapp', icon: 'fa-whatsapp', name: 'WhatsApp', gradient: 'linear-gradient(135deg, #25d366, #128c7e)' },
+  { id: 'discord', icon: 'fa-discord', name: 'Discord', gradient: 'linear-gradient(135deg, #5865f2, #7289da)' },
+  { id: 'linkedin', icon: 'fa-linkedin-in', name: 'LinkedIn', gradient: 'linear-gradient(135deg, #0077b5, #0a66c2)' },
+  { id: 'contact', icon: 'fa-envelope', name: 'Contact', color: '#00a8ff' },
   { id: 'settings', icon: 'fa-cog', name: 'Settings', color: '#666' },
 ];
 
@@ -44,17 +45,17 @@ export default function Dock({ onOpenApp }) {
               onClick={() => onOpenApp(app.id)}
               className="w-12 h-12 rounded-xl flex items-center justify-center text-xl transition-all relative group"
               style={{ 
-                background: app.color === '#00a8ff' 
+                background: app.gradient || (app.color === '#00a8ff' 
                   ? 'linear-gradient(135deg, #00a8ff, #0099ff)' 
                   : app.color === '#ff6b6b'
                   ? 'linear-gradient(135deg, #ff6b6b, #ee5a5a)'
                   : app.color === '#333'
                   ? 'linear-gradient(135deg, #444, #333)'
-                  : 'linear-gradient(135deg, #777, #555)',
+                  : 'linear-gradient(135deg, #777, #555)'),
                 boxShadow: '0 4px 15px rgba(0,0,0,0.3)',
               }}
             >
-              <i className={`fas ${app.icon} text-white`} />
+              <i className={`${app.gradient ? 'fab' : 'fas'} ${app.icon} text-white`} />
               
               {/* Tooltip */}
               <div 
