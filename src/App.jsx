@@ -7,9 +7,12 @@ import BootScreen from './components/BootScreen';
 import CustomCursor from './components/CustomCursor';
 import ContextMenu from './components/ContextMenu';
 import Notification from './components/Notification';
+import StartScreen from './components/StartScreen';
 
 function App() {
-  const [isBooting, setIsBooting] = useState(true);
+  const [showStartScreen, setShowStartScreen] = useState(true);
+  const [isBooting, setIsBooting] = useState(false);
+  const [startTime, setStartTime] = useState(null);
   const [openWindows, setOpenWindows] = useState({});
   const [activeWindow, setActiveWindow] = useState(null);
   const [contextMenu, setContextMenu] = useState({ show: false, x: 0, y: 0 });
@@ -17,8 +20,10 @@ function App() {
   const audioRef = useRef(new Audio('/notification.wav'));
   audioRef.current.volume = 0.5;
   
-  const handleBootStart = () => {
-    audioRef.current.play().catch(() => {});
+  const handleStart = () => {
+    setShowStartScreen(false);
+    setIsBooting(true);
+    setStartTime(Date.now());
   };
 
   const windowTitles = {
@@ -31,11 +36,13 @@ function App() {
   };
 
   useEffect(() => {
-    const bootTimer = setTimeout(() => {
-      setIsBooting(false);
-    }, 4000);
-    return () => clearTimeout(bootTimer);
-  }, []);
+    if (!showStartScreen && isBooting) {
+      const bootTimer = setTimeout(() => {
+        setIsBooting(false);
+      }, 4000);
+      return () => clearTimeout(bootTimer);
+    }
+  }, [showStartScreen, isBooting]);
 
   const openWindow = useCallback((windowId) => {
     setOpenWindows(prev => ({
@@ -105,16 +112,16 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (!isBooting) {
-      const timeouts = [
-        setTimeout(() => showNotification("New on the OS ? I'll advice you to check out the About Me.exe", "someone"), 5000),
-        setTimeout(() => showNotification("If i were you i would definitely check the Projects folder , it already looks fisshy", "someone"), 40000),
-        setTimeout(() => showNotification("Liked my site and want to contact me, press on the Contact.exe Hahahaha..", "someone"), 105000),
-        setTimeout(() => showNotification("Btw Thanks for visiting my site, also consider about supporting me on youtube and github.", "someone"), 285000),
-      ];
-      return () => timeouts.forEach(t => clearTimeout(t));
-    }
-  }, [isBooting]);
+    if (!startTime) return;
+    
+    const timeouts = [
+      setTimeout(() => showNotification("New on the OS ? I'll advice you to check out the About Me.exe", "someone"), 8000),
+      setTimeout(() => showNotification("If i were you i would definitely check the Projects folder , it already looks fisshy", "someone"), 40000),
+      setTimeout(() => showNotification("Liked my site and want to contact me, press on the Contact.exe Hahahaha..", "someone"), 105000),
+      setTimeout(() => showNotification("Btw Thanks for visiting my site, also consider about supporting me on youtube and github.", "someone"), 285000),
+    ];
+    return () => timeouts.forEach(t => clearTimeout(t));
+  }, [startTime]);
 
   useEffect(() => {
     if (contextMenu.show) {
@@ -129,10 +136,11 @@ function App() {
       <CustomCursor />
       
       <AnimatePresence>
-        {isBooting && <BootScreen key="boot" />}
+        {showStartScreen && <StartScreen key="start" onStart={handleStart} />}
+        {isBooting && !showStartScreen && <BootScreen key="boot" />}
       </AnimatePresence>
 
-      {!isBooting && (
+      {!isBooting && !showStartScreen && (
         <>
           <MenuBar activeWindow={activeWindow} windowTitles={windowTitles} />
           <Desktop 
