@@ -143,8 +143,9 @@ export default function Desktop({
         muted
         playsInline
         className="absolute inset-0 w-full h-full object-cover"
+        ref={(el) => el && el.play().catch(() => {})}
       >
-        <source src="/wallpaper.mp4" type="video/mp4" />
+        <source src="./wallpaper.mp4" type="video/mp4" />
       </video>
 
       {/* Desktop Icons */}

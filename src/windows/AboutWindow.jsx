@@ -28,7 +28,7 @@ export default function AboutWindow() {
           boxShadow: '0 10px 40px rgba(88, 166, 255, 0.3)',
         }}
       >
-        <img src="/profile.jpg" alt="RK Studios" className="w-full h-full object-cover" />
+        <img src="./profile.jpg" alt="RK Studios" className="w-full h-full object-cover" />
       </motion.div>
 
       <motion.h2

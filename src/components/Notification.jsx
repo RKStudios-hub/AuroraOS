@@ -26,8 +26,8 @@ export default function Notification({ message, type, onClose }) {
             <i className="fas fa-trash text-white text-sm" />
           </div>
         ) : (
-          <img 
-            src="/profile.jpg" 
+            <img 
+              src="./profile.jpg"
             alt="Someone" 
             className="w-10 h-10 rounded-full flex-shrink-0 object-cover"
           />

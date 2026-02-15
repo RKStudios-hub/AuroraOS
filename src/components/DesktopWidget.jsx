@@ -56,7 +56,7 @@ export default function DesktopWidget({ toggleMusic, isMusicPlaying }) {
       <div className="fixed bottom-2 left-4 z-20">
         <div className="flex items-center gap-3 bg-black/40 backdrop-blur-md rounded-xl px-4 py-3 border border-white/10">
           <img 
-            src="/music.png" 
+            src="./music.png" 
             alt="Album" 
             className="w-12 h-12 rounded-lg object-cover shadow-lg"
           />

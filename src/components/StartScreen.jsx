@@ -15,7 +15,7 @@ export default function StartScreen({ onStart }) {
         transition={{ delay: 0.2, type: 'spring' }}
         className="mb-4"
       >
-        <img src="/Logo.png" alt="AuroraOS" className="w-64 h-64 object-contain" />
+        <img src="./Logo.png" alt="AuroraOS" className="w-64 h-64 object-contain" />
       </motion.div>
 
       <motion.button

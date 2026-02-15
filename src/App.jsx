@@ -18,8 +18,8 @@ function App() {
   const [contextMenu, setContextMenu] = useState({ show: false, x: 0, y: 0 });
   const [notification, setNotification] = useState(null);
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
-  const audioRef = useRef(new Audio('/notification.wav'));
-  const musicRef = useRef(new Audio('/music.mp3'));
+  const audioRef = useRef(new Audio('./notification.wav'));
+  const musicRef = useRef(new Audio('./music.mp3'));
   audioRef.current.volume = 0.5;
   musicRef.current.volume = 0.15;
   musicRef.current.loop = true;

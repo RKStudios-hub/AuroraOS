@@ -3,7 +3,6 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://RKStudios-hub.github.io/AuroraOS",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

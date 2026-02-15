@@ -86,7 +86,7 @@ export default function BootScreen() {
         transition={{ delay: 0.5, type: 'spring' }}
         className="mb-8"
       >
-        <img src="/Logo.png" alt="AuroraOS" className="w-64 h-64 object-contain" />
+        <img src="./Logo.png" alt="AuroraOS" className="w-64 h-64 object-contain" />
       </motion.div>
 
       {/* Loading bar */}
