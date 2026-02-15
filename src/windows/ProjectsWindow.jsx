@@ -31,6 +31,30 @@ const ModrinthFolderIcon = ({ color }) => (
   </svg>
 );
 
+const GitHubProjectIcon = ({ color }) => (
+  <svg viewBox="0 0 640 640" style={{ width: '24px', height: '24px' }}>
+    <path fill={color} d="M192 64C156.7 64 128 92.7 128 128L128 512C128 547.3 156.7 576 192 576L448 576C483.3 576 512 547.3 512 512L512 234.5C512 217.5 505.3 201.2 493.3 189.2L386.7 82.7C374.7 70.7 358.5 64 341.5 64L192 64zM453.5 240L360 240C346.7 240 336 229.3 336 216L336 122.5L453.5 240z"/>
+  </svg>
+);
+
+const YouTubeProjectIcon = ({ color }) => (
+  <svg viewBox="0 0 8 8" style={{ width: '24px', height: '24px' }}>
+    <path fill={color} d="M.5 1c-.28 0-.5.23-.5.5v4c0 .28.23.5.5.5h5c.28 0 .5-.22.5-.5V4l1 1h1V2H7L6 3V1.5c0-.28-.22-.5-.5-.5h-5z"/>
+  </svg>
+);
+
+const SketchfabProjectIcon = ({ color }) => (
+  <svg viewBox="0 0 24 24" style={{ width: '24px', height: '24px' }}>
+    <path fill={color} fillRule="evenodd" d="m9.675 19.34l-3-2.144c-.821-.586-1.232-.88-1.453-1.31C5 15.456 5 14.95 5 13.942v-3.883c0-.322 0-.592.007-.825L11 13.514v6.717c-.357-.2-.773-.498-1.325-.892m3.325.346l3-2.143c.821-.586 1.232-.88 1.453-1.31c.222-.43.222-.935.222-1.944v-3.883c0-.322 0-.592-.007-.825L13 13.514zm5.128-12.837L12 11.771L5.872 7.394c.212-.168.475-.356.803-.59l3-2.143C10.798 3.859 11.36 3.458 12 3.458c.64 0 1.202.4 2.325 1.203l3 2.143c.329.234.591.422.803.59" clipRule="evenodd"/>
+  </svg>
+);
+
+const ModrinthProjectIcon = ({ color }) => (
+  <svg viewBox="0 0 24 24" style={{ width: '24px', height: '24px' }}>
+    <path fill={color} d="M4 2h16a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2m2 4v4h4v2H8v6h2v-2h4v2h2v-6h-2v-2h4V6h-4v4h-4V6H6Z"/>
+  </svg>
+);
+
 const categories = [
   { id: 'all', label: 'All Files', iconClass: 'fa-folder' },
   { id: 'github', label: 'GitHub', iconClass: 'fa-github' },
@@ -144,16 +168,10 @@ export default function ProjectsWindow() {
                     boxShadow: '0 2px 10px rgba(0,168,255,0.3)',
                   }}
                 >
-                  <i 
-                    className="fas fa-folder" 
-                    style={{ 
-                      fontSize: 'min(2vw, 16px)',
-                      color: project.category === 'github' ? '#333' : 
-                             project.category === 'youtube' ? '#fff' :
-                             project.category === 'sketchfab' ? '#fff' :
-                             project.category === 'modrinth' ? '#fff' : '#fff'
-                    }} 
-                  />
+                  {project.category === 'github' && <GitHubProjectIcon color="#fff" />}
+                  {project.category === 'youtube' && <YouTubeProjectIcon color={project.category === 'youtube' ? '#fff' : '#fff'} />}
+                  {project.category === 'sketchfab' && <SketchfabProjectIcon color={project.category === 'sketchfab' ? '#fff' : '#fff'} />}
+                  {project.category === 'modrinth' && <ModrinthProjectIcon color={project.category === 'modrinth' ? '#fff' : '#fff'} />}
                 </div>
                 <span className="text-xs text-black/70 text-center group-hover:text-black truncate w-full">
                   {project.title}
