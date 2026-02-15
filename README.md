@@ -1,16 +1,45 @@
-# React + Vite
+# AuroraOS — Portfolio as a Kid
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An fun, OS-style portfolio website built just for fun — making a desktop interface in the browser because why not?
 
-Currently, two official plugins are available:
+## What is this?
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+It's basically a fake operating system that acts as my portfolio. Think of it as Windows/macOS but worse and made by a kid who thought "I can do that!"
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- 🖥️ Desktop with icons you can click (and drag around)
+- 📂 Windows that open, close, and minimize (somewhat like real OS)
+- 🎮 Terminal that pretends to be Linux (very badly)
+- 🎨 Paint app where you can actually draw
+- 🌐 Browser with a custom homepage (Bing-powered search)
+- 🎵 Background music with a cool visualizer in the menu bar
+- ⏰ Clock widget that shows time (surprisingly accurate)
+- 📢 Notifications that pop up at random times
+- And more things I probably forgot...
 
-## Expanding the ESLint configuration
+## Tech Used
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+React, Tailwind CSS, Framer Motion — the usual stuff kids use to impress their friends.
+
+## How to Run
+
+```bash
+npm run dev
+```
+
+Then open http://localhost:5173 and pretend you're using a computer from the future.
+
+## Credits
+
+- 🎬 **Wallpaper** - Credits to respective creator
+- 🎵 **Background Music** - Credits to respective creator (song: "Sea of feelings" by Lowx)
+- All other code, design, and content - Copyright © 2026 RK Studios
+
+## Note
+
+This was made for fun and learning. If it breaks, that's on purpose (just kidding, it wasn't).
+
+---
+
+Made with 🖤 by RK Studios
