@@ -6,8 +6,7 @@ export default function StartScreen({ onStart }) {
       initial={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
-      className="fixed inset-0 z-[99999] flex flex-col items-center justify-center cursor-pointer"
-      onClick={onStart}
+      className="fixed inset-0 z-[99999] flex flex-col items-center justify-center"
       style={{ background: 'linear-gradient(180deg, #1a1a2e 0%, #0a0a15 100%)' }}
     >
       <motion.div
@@ -28,13 +27,26 @@ export default function StartScreen({ onStart }) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5 }}
         onClick={onStart}
-        className="px-8 py-3 rounded-full text-white font-medium text-lg"
+        className="font-medium text-lg cursor-pointer"
         style={{ 
-          background: 'linear-gradient(135deg, #58a6ff, #bc8cff)',
-          boxShadow: '0 4px 20px rgba(88, 166, 255, 0.4)',
+          background: 'transparent',
+          border: '3px solid white',
+          borderRadius: '8px',
+          color: 'white',
+          padding: '8px 48px',
+          marginTop: '-20px',
+          transition: 'all 0.3s ease',
+        }}
+        onMouseEnter={(e) => {
+          e.target.style.background = 'white';
+          e.target.style.color = '#1a1a2e';
+        }}
+        onMouseLeave={(e) => {
+          e.target.style.background = 'transparent';
+          e.target.style.color = 'white';
         }}
       >
-        Click to Start
+        Login
       </motion.button>
     </motion.div>
   );

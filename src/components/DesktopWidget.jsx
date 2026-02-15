@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export default function DesktopWidget() {
+export default function DesktopWidget({ toggleMusic, isMusicPlaying }) {
   const [time, setTime] = useState(new Date());
   const [weather, setWeather] = useState(null);
   const [weatherLoading, setWeatherLoading] = useState(true);
@@ -52,6 +52,31 @@ export default function DesktopWidget() {
 
   return (
     <>
+      {/* Music Widget */}
+      <div className="fixed bottom-4 left-4 z-20">
+        <div className="flex items-center gap-3 bg-black/40 backdrop-blur-md rounded-xl px-4 py-3 border border-white/10">
+          <img 
+            src="/music.png" 
+            alt="Album" 
+            className="w-12 h-12 rounded-lg object-cover shadow-lg"
+          />
+          <div className="text-white">
+            <div className="text-sm font-medium truncate max-w-[140px]">Sea of feelings</div>
+            <div className="text-xs text-white/60">Lowx - On repeat</div>
+          </div>
+          <div className="flex gap-2 ml-2 items-center">
+            <i className="fa-solid fa-repeat text-white/70 hover:text-white cursor-pointer transition text-sm"></i>
+            <i className="fa-solid fa-backward-step text-white/70 hover:text-white cursor-pointer transition text-sm"></i>
+            <i 
+              className={`fa-solid ${isMusicPlaying ? 'fa-pause' : 'fa-play'} text-white/70 hover:text-white cursor-pointer transition ml-1`}
+              onClick={toggleMusic}
+            ></i>
+            <i className="fa-solid fa-forward-step text-white/70 hover:text-white cursor-pointer transition ml-1 text-sm"></i>
+          </div>
+        </div>
+      </div>
+
+      {/* Clock Widget */}
       <div className="fixed right-8 top-1/2 -translate-y-1/2 z-20 text-white">
         <div 
           className="w-[500px] h-[480px] px-20 py-16"

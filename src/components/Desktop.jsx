@@ -110,7 +110,9 @@ export default function Desktop({
   minimizeWindow,
   focusWindow,
   activeWindow,
-  showContextMenu
+  showContextMenu,
+  toggleMusic,
+  isMusicPlaying
 }) {
   const windowList = Object.entries(openWindows).filter(([_, w]) => w.isOpen);
 
@@ -168,7 +170,7 @@ export default function Desktop({
       })}
 
       {/* Desktop Widget */}
-      <DesktopWidget />
+      <DesktopWidget toggleMusic={toggleMusic} isMusicPlaying={isMusicPlaying} />
     </div>
   );
 }

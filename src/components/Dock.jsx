@@ -57,6 +57,7 @@ export default function Dock({ onOpenApp, showNotification }) {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.6 + index * 0.05 }}
+            style={app.wide ? { width: '108px' } : {}}
           >
             <motion.button
               whileHover={{ 

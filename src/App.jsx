@@ -17,13 +17,30 @@ function App() {
   const [activeWindow, setActiveWindow] = useState(null);
   const [contextMenu, setContextMenu] = useState({ show: false, x: 0, y: 0 });
   const [notification, setNotification] = useState(null);
+  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
   const audioRef = useRef(new Audio('/notification.wav'));
+  const musicRef = useRef(new Audio('/music.mp3'));
   audioRef.current.volume = 0.5;
+  musicRef.current.volume = 0.15;
+  musicRef.current.loop = true;
   
   const handleStart = () => {
     setShowStartScreen(false);
     setIsBooting(true);
     setStartTime(Date.now());
+    setTimeout(() => {
+      musicRef.current.play().catch(() => {});
+      setIsMusicPlaying(true);
+    }, 2000);
+  };
+
+  const toggleMusic = () => {
+    if (isMusicPlaying) {
+      musicRef.current.pause();
+    } else {
+      musicRef.current.play().catch(() => {});
+    }
+    setIsMusicPlaying(!isMusicPlaying);
   };
 
   const windowTitles = {
@@ -151,6 +168,8 @@ function App() {
             focusWindow={focusWindow}
             activeWindow={activeWindow}
             showContextMenu={showContextMenu}
+            toggleMusic={toggleMusic}
+            isMusicPlaying={isMusicPlaying}
           />
           <Dock onOpenApp={openWindow} showNotification={showNotification} />
           
