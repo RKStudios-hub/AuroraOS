@@ -73,14 +73,7 @@ export default function Window({
         disableDragging={isMaximized}
         size={getWindowSize()}
         position={getWindowPosition()}
-        dragBoundFunc={(pos) => {
-          if (isMaximized) return pos;
-          const maxY = window.innerHeight - 100;
-          return {
-            left: pos.x,
-            top: Math.max(40, Math.min(pos.y, maxY)),
-          };
-        }}
+        bounds="parent"
         className={`fixed z-30 overflow-hidden ${isMaximized ? 'rounded-none' : 'rounded-xl'}`}
         style={{
           background: 'rgba(255, 255, 255, 0.95)',

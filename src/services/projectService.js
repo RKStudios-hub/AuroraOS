@@ -64,22 +64,24 @@ export async function fetchModrinthProjects(userId) {
   }
 }
 
-// Fetch from YouTube - using channel RSS feed
+// Fetch from YouTube - using YouTube Data API v3
 export async function fetchYouTubeVideos(channelId = YOUTUBE_CHANNEL_ID) {
+  const API_KEY = 'AIzaSyAu4ZbRUGt1ET7BKOU5j4EOv3cndhOlLIU';
+  
   try {
-    // Using a CORS proxy to fetch YouTube channel RSS
-    const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`);
-    if (!response.ok) return [];
-    
+    const response = await fetch(
+      `https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&channelId=${channelId}&part=snippet&order=date&maxResults=20`
+    );
     const data = await response.json();
-    if (!data.items || data.items.length === 0) return [];
     
-    return data.items.map((video, index) => ({
-      id: `yt-${index}`,
-      title: video.title,
-      description: video.description || 'YouTube Video',
-      url: video.link,
-      thumbnail: video.thumbnail,
+    if (!data.items) return [];
+    
+    return data.items.map(item => ({
+      id: `yt-${item.id.videoId}`,
+      title: item.snippet.title,
+      description: item.snippet.description,
+      url: `https://youtube.com/watch?v=${item.id.videoId}`,
+      thumbnail: item.snippet.thumbnails.high?.url || item.snippet.thumbnails.medium?.url,
       platform: 'youtube',
       icon: '🎬',
     }));
