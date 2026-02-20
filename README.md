@@ -1,5 +1,5 @@
-<h1 align="center"> <img width="250" height="250" alt="Logo" src="https://github.com/user-attachments/assets/895eec0a-d97a-4caa-af3e-6777763a0e52" /></h1>
-# My Portfolio as a beginner
+<h1 align="center"> <img width="250" height="250" alt="Logo" src="https://github.com/user-attachments/assets/895eec0a-d97a-4caa-af3e-6777763a0e52" />My Portfolio as a beginner</h1>
+## My Portfolio as a beginner
 
 An fun, OS-style portfolio website built just for fun — making a desktop interface in the browser because why not?
 
