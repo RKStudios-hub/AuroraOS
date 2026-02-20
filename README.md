@@ -1,4 +1,6 @@
-# AuroraOS — Portfolio as a Kid
+<h1 align="center"> <img width="250" height="250" alt="Logo" src="https://github.com/user-attachments/assets/895eec0a-d97a-4caa-af3e-6777763a0e52" /></h1>
+#<h1 align="center">AuroraOS — Portfolio as a Kid</h1>
+
 
 An fun, OS-style portfolio website built just for fun — making a desktop interface in the browser because why not?
 
