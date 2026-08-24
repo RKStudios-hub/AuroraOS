@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { fetchAllProjects } from '../services/projectService';
 
-// Content SVG Icons for Projects
+// Content SVG Vector Icons
 const GitHubSVG = () => (
   <svg viewBox="0 0 24 24" className="w-10 h-10 drop-shadow-md">
     <path fill="#24292E" d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
@@ -46,7 +46,7 @@ export default function ProjectsWindow() {
   const [activeCategory, setActiveCategory] = useState('all');
   const [projects, setProjects] = useState({ github: [], modrinth: [], sketchfab: [], youtube: [] });
   const [loading, setLoading] = useState(true);
-  const [selectedProject, setSelectedProject] = useState(null); // Clicked PowerToys preview
+  const [selectedProject, setSelectedProject] = useState(null);
 
   useEffect(() => {
     async function loadProjects() {
@@ -97,8 +97,8 @@ export default function ProjectsWindow() {
   }
 
   return (
-    <div className="flex h-full select-none relative overflow-hidden" style={{ background: '#ffffff' }}>
-      {/* Sidebar - Original Layout */}
+    <div className="flex h-full select-none relative overflow-hidden text-slate-800" style={{ background: '#ffffff' }}>
+      {/* Left Sidebar */}
       <div 
         className="w-40 p-2 flex flex-col gap-0.5"
         style={{ background: 'rgba(0,0,0,0.03)' }}
@@ -122,18 +122,22 @@ export default function ProjectsWindow() {
         ))}
       </div>
 
-      {/* Main Grid Content Area */}
-      <div className="flex-1 p-4 h-full overflow-auto flex flex-col">
+      {/* Main Grid Content Area - Balanced Padding */}
+      <div className="flex-1 p-3.5 h-full overflow-y-auto flex flex-col">
         {/* Path bar */}
-        <div className="flex items-center gap-1 text-xs text-black/40 mb-4">
+        <div className="flex items-center gap-1 text-xs text-black/40 mb-3">
           <i className="fas fa-folder text-yellow-500" />
           <span>Home</span>
           <i className="fas fa-chevron-right" />
-          <span className="text-black/60">{categories.find(c => c.id === activeCategory)?.label}</span>
+          <span className="text-black/60 font-medium">{categories.find(c => c.id === activeCategory)?.label}</span>
         </div>
 
         {/* Content SVG Icons Grid */}
-        <div className="grid gap-3 p-1 flex-1" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(88px, 1fr))' }}>
+        <div 
+          className="grid gap-3 p-1 flex-1" 
+          style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(88px, 1fr))' }}
+          onClick={() => setSelectedProject(null)}
+        >
           <AnimatePresence>
             {filteredProjects.map((project, index) => (
               <motion.div
@@ -144,7 +148,10 @@ export default function ProjectsWindow() {
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ delay: index * 0.02 }}
                 whileHover={{ y: -2 }}
-                onClick={() => setSelectedProject(project)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedProject(project);
+                }}
                 className={`flex flex-col items-center gap-1.5 p-2 rounded-xl cursor-pointer group transition-all ${
                   selectedProject?.id === project.id 
                     ? 'bg-blue-50 border border-blue-300 shadow-sm ring-2 ring-blue-500/20' 
@@ -169,30 +176,30 @@ export default function ProjectsWindow() {
         )}
       </div>
 
-      {/* Windows PowerToys Style Preview Sidebar Pane */}
+      {/* Slim 6:16 Ratio PowerToys Style Preview Sidebar Pane */}
       <AnimatePresence>
         {selectedProject && (
           <motion.div
-            initial={{ x: 260, opacity: 0 }}
+            initial={{ x: 220, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
-            exit={{ x: 260, opacity: 0 }}
-            className="w-68 bg-slate-50 border-l border-slate-200 p-4 flex flex-col gap-3 shadow-xl z-20 overflow-y-auto"
+            exit={{ x: 220, opacity: 0 }}
+            className="w-52 bg-slate-50 border-l border-slate-200 p-3 flex flex-col gap-2.5 shadow-xl z-20 overflow-y-auto"
           >
             {/* Sidebar Header */}
-            <div className="flex items-center justify-between border-b border-slate-200 pb-2">
-              <div className="flex items-center gap-1.5 text-xs font-bold text-slate-700">
+            <div className="flex items-center justify-between border-b border-slate-200 pb-1.5">
+              <div className="flex items-center gap-1 text-[11px] font-bold text-slate-700">
                 <i className="fas fa-eye text-blue-500" /> PowerToys Peek
               </div>
               <button
                 onClick={() => setSelectedProject(null)}
-                className="w-6 h-6 rounded-full hover:bg-slate-200 text-slate-500 flex items-center justify-center"
+                className="w-5 h-5 rounded-full hover:bg-slate-200 text-slate-500 flex items-center justify-center"
               >
-                <i className="fas fa-times text-xs" />
+                <i className="fas fa-times text-[10px]" />
               </button>
             </div>
 
-            {/* High Resolution Media Thumbnail */}
-            <div className="relative w-full aspect-video rounded-xl bg-slate-200 border border-slate-300 overflow-hidden shadow-inner">
+            {/* Slim 6:16 Aspect Thumbnail Preview Card */}
+            <div className="relative w-full aspect-[6/16] max-h-44 rounded-xl bg-slate-200 border border-slate-300 overflow-hidden shadow-inner">
               <img 
                 src={selectedProject.thumbnail} 
                 alt={selectedProject.title}
@@ -201,18 +208,18 @@ export default function ProjectsWindow() {
                   e.target.src = 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80';
                 }}
               />
-              <span className={`absolute top-2 left-2 px-2 py-0.5 rounded-full text-[9px] font-bold ${getBadgeColor(selectedProject.category)} shadow-sm`}>
+              <span className={`absolute top-1.5 left-1.5 px-2 py-0.5 rounded text-[9px] font-bold ${getBadgeColor(selectedProject.category)} shadow-sm`}>
                 {selectedProject.category.toUpperCase()}
               </span>
             </div>
 
             {/* Project Details */}
-            <div className="flex flex-col gap-1.5 text-xs">
-              <h3 className="font-bold text-slate-800 leading-snug">{selectedProject.title}</h3>
-              <p className="text-[11px] text-slate-500 leading-relaxed">{selectedProject.description}</p>
+            <div className="flex flex-col gap-1 text-[11px]">
+              <h3 className="font-bold text-slate-800 leading-tight">{selectedProject.title}</h3>
+              <p className="text-[10px] text-slate-500 leading-relaxed">{selectedProject.description}</p>
               
               {/* Stats */}
-              <div className="flex flex-wrap gap-2.5 text-[11px] text-slate-600 font-medium pt-2 border-t border-slate-200 mt-1">
+              <div className="flex flex-wrap gap-2 text-[10px] text-slate-600 font-medium pt-1.5 border-t border-slate-200 mt-1">
                 {selectedProject.stars && <span>⭐ {selectedProject.stars} stars</span>}
                 {selectedProject.views && <span>👁️ {selectedProject.views} views</span>}
                 {selectedProject.likes && <span>❤️ {selectedProject.likes} likes</span>}
@@ -225,9 +232,9 @@ export default function ProjectsWindow() {
               href={selectedProject.url}
               target="_blank"
               rel="noreferrer"
-              className="mt-auto w-full py-2.5 rounded-xl bg-blue-600 text-white font-semibold text-xs text-center hover:bg-blue-700 transition-colors shadow-md shadow-blue-500/20 flex items-center justify-center gap-2"
+              className="mt-auto w-full py-2 rounded-xl bg-blue-600 text-white font-semibold text-xs text-center hover:bg-blue-700 transition-colors shadow-md shadow-blue-500/20 flex items-center justify-center gap-1.5"
             >
-              <span>Open {selectedProject.category.toUpperCase()} Project</span>
+              <span>Open {selectedProject.category.toUpperCase()}</span>
               <i className="fas fa-external-link-alt text-[10px]" />
             </a>
           </motion.div>
