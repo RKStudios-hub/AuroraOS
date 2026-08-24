@@ -2,13 +2,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
 
 const dockApps = [
-  { id: 'facebook', icon: 'fa-facebook-f', name: 'Facebook', gradient: 'linear-gradient(135deg, #1877f2, #405de6)', url: 'https://www.facebook.com' },
-  { id: 'design', icon: 'fa-palette', name: 'Design', color: '#ff6b6b' },
+  { id: 'browser', icon: 'fa-globe', name: 'Browser', gradient: 'linear-gradient(135deg, #00c6ff, #0072ff)' },
+  { id: 'projects', icon: 'fa-folder-open', name: 'Projects', gradient: 'linear-gradient(135deg, #3a7bd5, #3a6073)' },
+  { id: 'design', icon: 'fa-palette', name: 'Design', gradient: 'linear-gradient(135deg, #ff6b6b, #ee5a24)' },
+  { id: 'paint', icon: 'fa-paintbrush', name: 'Paint', gradient: 'linear-gradient(135deg, #00f2fe, #4facfe)' },
+  { id: 'terminal', name: 'Terminal', gradient: 'linear-gradient(135deg, #2d2d2d, #1a1a1a)', icon: null },
   { id: 'instagram', icon: 'fa-instagram', name: 'Instagram', gradient: 'linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)', url: 'https://instagram.com' },
-  { id: 'whatsapp', icon: 'fa-whatsapp', name: 'WhatsApp', gradient: 'linear-gradient(135deg, #25d366, #128c7e)', url: 'https://whatsapp.com' },
   { id: 'discord', icon: 'fa-discord', name: 'Discord', gradient: 'linear-gradient(135deg, #5865f2, #7289da)', url: 'https://discord.gg/xwH3u8EGh3' },
   { id: 'linkedin', icon: 'fa-linkedin-in', name: 'LinkedIn', gradient: 'linear-gradient(135deg, #0077b5, #0a66c2)', url: 'https://linkedin.com' },
-  { id: 'terminal', name: 'Terminal', gradient: 'linear-gradient(135deg, #2d2d2d, #1a1a1a)', icon: null },
 ];
 
 export default function Dock({ onOpenApp, showNotification }) {

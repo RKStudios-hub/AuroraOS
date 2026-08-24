@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export default function ContextMenu({ x, y, onClose, openWindow, desktopSettings, setDesktopSettings, showNotification, createFolder, createFile, renameItem, deleteItem, selectedItem, setRenameDialog }) {
+export default function ContextMenu({ x, y, onClose, openWindow, desktopSettings, setDesktopSettings, showNotification, createFolder, createFile, renameItem, deleteItem, selectedItem, setRenameDialog, handleDesktopRefresh }) {
   const [openSubmenu, setOpenSubmenu] = useState(null);
 
   const handleSetIconSize = (size) => {
@@ -98,7 +98,14 @@ export default function ContextMenu({ x, y, onClose, openWindow, desktopSettings
     { 
       label: 'Refresh', 
       icon: 'fa-sync-alt',
-      onClick: () => { window.location.reload(); onClose(); }
+      onClick: () => { 
+        if (handleDesktopRefresh) {
+          handleDesktopRefresh();
+        } else if (showNotification) {
+          showNotification('Desktop refreshed', 'system');
+        }
+        onClose(); 
+      }
     },
     { type: 'divider' },
     { 

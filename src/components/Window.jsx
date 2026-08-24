@@ -3,14 +3,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Rnd } from 'react-rnd';
 
 const windowConfigs = {
-  about: { title: 'About', iconClass: 'fa-user', defaultWidth: 400, defaultHeight: 450 },
-  projects: { title: 'Projects', iconClass: 'fa-folder', defaultWidth: 600, defaultHeight: 450 },
-  design: { title: 'Design Studio', iconClass: 'fa-palette', defaultWidth: 450, defaultHeight: 450 },
-  contact: { title: 'Contact', iconClass: 'fa-envelope', defaultWidth: 400, defaultHeight: 450 },
-  game: { title: 'Games', iconClass: 'fa-gamepad', defaultWidth: 450, defaultHeight: 400 },
-  terminal: { title: 'Terminal', iconClass: 'fa-terminal', defaultWidth: 600, defaultHeight: 400 },
+  about: { title: 'About', iconClass: 'fa-user', defaultWidth: 450, defaultHeight: 500 },
+  projects: { title: 'Projects', iconClass: 'fa-folder-open', defaultWidth: 780, defaultHeight: 520 },
+  design: { title: 'Design Studio', iconClass: 'fa-palette', defaultWidth: 800, defaultHeight: 540 },
+  contact: { title: 'Contact', iconClass: 'fa-envelope', defaultWidth: 450, defaultHeight: 480 },
+  game: { title: 'Games', iconClass: 'fa-gamepad', defaultWidth: 480, defaultHeight: 450 },
+  terminal: { title: 'Terminal', iconClass: 'fa-terminal', defaultWidth: 650, defaultHeight: 420 },
   paint: { title: 'Paint - RK Studio', iconClass: 'fa-paintbrush', defaultWidth: 1000, defaultHeight: 650 },
-  browser: { title: 'Browser', iconClass: 'fa-globe', defaultWidth: 900, defaultHeight: 650 },
+  browser: { title: 'Browser', iconClass: 'fa-globe', defaultWidth: 920, defaultHeight: 650 },
+  folder: { title: 'Folder Explorer', iconClass: 'fa-folder-open', defaultWidth: 650, defaultHeight: 450 },
+  texteditor: { title: 'Text Editor', iconClass: 'fa-file-alt', defaultWidth: 600, defaultHeight: 400 },
 };
 
 export default function Window({ 
@@ -24,7 +26,6 @@ export default function Window({
 }) {
   const [isMaximized, setIsMaximized] = useState(false);
   const config = windowConfigs[id] || windowConfigs.about;
-  const containerRef = useRef(null);
 
   const handleClose = (e) => {
     e.stopPropagation();
@@ -61,8 +62,8 @@ export default function Window({
     <AnimatePresence>
       <Rnd
         default={{
-          x: 150 + Math.random() * 100,
-          y: 80 + Math.random() * 60,
+          x: 180 + (Math.random() * 40),
+          y: 80 + (Math.random() * 40),
           width: config.defaultWidth,
           height: config.defaultHeight,
         }}
@@ -79,24 +80,24 @@ export default function Window({
           background: 'rgba(255, 255, 255, 0.95)',
           backdropFilter: 'blur(30px)',
           boxShadow: isActive 
-            ? '0 20px 60px rgba(0, 0, 0, 0.3)' 
+            ? '0 20px 60px rgba(0, 0, 0, 0.4)' 
             : '0 10px 30px rgba(0, 0, 0, 0.2)',
         }}
         onMouseDown={onFocus}
       >
         {/* Title bar - macOS style */}
         <div 
-          className="window-drag-handle h-8 flex items-center justify-between px-3"
+          className="window-drag-handle h-8 flex items-center justify-between px-3 relative"
           style={{
-            background: isActive ? 'rgba(245, 245, 245, 0.95)' : 'rgba(235, 235, 235, 0.95)',
+            background: isActive ? 'rgba(240, 240, 245, 0.95)' : 'rgba(225, 225, 230, 0.95)',
           }}
           onDoubleClick={handleMaximize}
         >
           {/* Spacer */}
           <div className="flex-1" />
 
-          {/* Traffic lights - right aligned */}
-          <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+          {/* Traffic lights */}
+          <div className="flex items-center gap-2 z-10" onClick={(e) => e.stopPropagation()}>
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
@@ -127,9 +128,9 @@ export default function Window({
           </div>
 
           {/* Title */}
-          <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2">
+          <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2 pointer-events-none">
             <i className={`fas ${config.iconClass} text-black/60 text-xs`} />
-            <span className="text-black/80 text-xs font-medium">{config.title}</span>
+            <span className="text-black/80 text-xs font-semibold">{config.title}</span>
           </div>
         </div>
 

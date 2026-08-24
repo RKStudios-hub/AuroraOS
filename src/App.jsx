@@ -8,6 +8,7 @@ import CustomCursor from './components/CustomCursor';
 import ContextMenu from './components/ContextMenu';
 import Notification from './components/Notification';
 import StartScreen from './components/StartScreen';
+import RenameDialog from './components/RenameDialog';
 
 function App() {
   const [showStartScreen, setShowStartScreen] = useState(true);
@@ -15,9 +16,27 @@ function App() {
   const [startTime, setStartTime] = useState(null);
   const [openWindows, setOpenWindows] = useState({});
   const [activeWindow, setActiveWindow] = useState(null);
-  const [contextMenu, setContextMenu] = useState({ show: false, x: 0, y: 0 });
+  const [contextMenu, setContextMenu] = useState({ show: false, x: 0, y: 0, targetItem: null });
   const [notification, setNotification] = useState(null);
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
+
+  // Desktop files, folders, and settings state
+  const [userItems, setUserItems] = useState([
+    { id: 'folder_1', name: 'My Documents', type: 'folder', createdAt: Date.now() - 10000, size: 0 },
+    { id: 'file_1', name: 'Welcome.txt', type: 'file', content: 'Welcome to AuroraOS!\nMade by RK Studios.', createdAt: Date.now(), size: 42 }
+  ]);
+  const [desktopSettings, setDesktopSettings] = useState({
+    iconSize: 'medium',
+    sortBy: 'name',
+    autoArrange: true,
+    alignToGrid: true,
+    showIcons: true,
+  });
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [renameDialog, setRenameDialog] = useState({ show: false, item: null });
+  const [activeFile, setActiveFile] = useState(null);
+  const [activeFolder, setActiveFolder] = useState(null);
+
   const audioRef = useRef(new Audio('./notification.wav'));
   const musicRef = useRef(new Audio('./music.mp3'));
   audioRef.current.volume = 0.5;
@@ -52,6 +71,8 @@ function App() {
     terminal: 'Terminal',
     paint: 'Paint - RK Studio',
     browser: 'Browser',
+    folder: activeFolder ? activeFolder.name : 'Folder',
+    texteditor: activeFile ? activeFile.name : 'Text Editor',
   };
 
   useEffect(() => {
@@ -124,12 +145,15 @@ function App() {
     setActiveWindow(windowId);
   }, []);
 
-  const showContextMenu = useCallback((x, y) => {
-    setContextMenu({ show: true, x, y });
+  const showContextMenu = useCallback((x, y, item = null) => {
+    if (item) {
+      setSelectedItem(item);
+    }
+    setContextMenu({ show: true, x, y, targetItem: item });
   }, []);
 
   const hideContextMenu = useCallback(() => {
-    setContextMenu({ show: false, x: 0, y: 0 });
+    setContextMenu({ show: false, x: 0, y: 0, targetItem: null });
   }, []);
 
   const showNotification = useCallback((message, type = 'someone') => {
@@ -141,6 +165,58 @@ function App() {
     setTimeout(() => setNotification(null), 12000);
   }, []);
 
+  // Folder & File handlers
+  const createFolder = (name = 'New Folder') => {
+    const newFolder = {
+      id: `folder_${Date.now()}`,
+      name,
+      type: 'folder',
+      createdAt: Date.now(),
+      size: 0,
+    };
+    setUserItems(prev => [...prev, newFolder]);
+    showNotification(`Created ${name}`, 'system');
+  };
+
+  const createFile = (name = 'New Text Document.txt') => {
+    const newFile = {
+      id: `file_${Date.now()}`,
+      name,
+      type: 'file',
+      content: '',
+      createdAt: Date.now(),
+      size: 0,
+    };
+    setUserItems(prev => [...prev, newFile]);
+    setActiveFile(newFile);
+    openWindow('texteditor');
+    showNotification(`Created ${name}`, 'system');
+  };
+
+  const renameItem = (id, newName) => {
+    setUserItems(prev => prev.map(item => item.id === id ? { ...item, name: newName } : item));
+    showNotification(`Renamed to ${newName}`, 'system');
+  };
+
+  const deleteItem = (id) => {
+    setUserItems(prev => prev.filter(item => item.id !== id));
+    setSelectedItem(null);
+    showNotification('Item moved to Recycle Bin', 'recycle');
+  };
+
+  const handleDesktopRefresh = () => {
+    setSelectedItem(null);
+    // Sort array or refresh desktop view without reloading page
+    setUserItems(prev => [...prev]);
+    showNotification('Desktop refreshed', 'system');
+  };
+
+  const saveFileContent = (file) => {
+    setUserItems(prev => prev.map(item => item.id === file.id ? { ...item, content: file.content, name: file.name, size: file.content.length } : item));
+    setActiveFile(file);
+    showNotification('File saved', 'system');
+  };
+
   useEffect(() => {
     if (!startTime) return;
     
@@ -151,7 +227,7 @@ function App() {
       setTimeout(() => showNotification("Btw Thanks for visiting my site, also consider about supporting me on youtube and github.", "someone"), 285000),
     ];
     return () => timeouts.forEach(t => clearTimeout(t));
-  }, [startTime]);
+  }, [startTime, showNotification]);
 
   useEffect(() => {
     if (contextMenu.show) {
@@ -175,7 +251,15 @@ function App() {
           <MenuBar activeWindow={activeWindow} windowTitles={windowTitles} musicRef={musicRef} isMusicPlaying={isMusicPlaying} />
           <Desktop 
             openWindows={openWindows}
-            openWindow={openWindow}
+            openWindow={(id) => {
+              if (id === 'texteditor' && !activeFile && userItems.find(i => i.type === 'file')) {
+                setActiveFile(userItems.find(i => i.type === 'file'));
+              }
+              if (id === 'folder' && !activeFolder && userItems.find(i => i.type === 'folder')) {
+                setActiveFolder(userItems.find(i => i.type === 'folder'));
+              }
+              openWindow(id);
+            }}
             closeWindow={closeWindow}
             minimizeWindow={minimizeWindow}
             focusWindow={focusWindow}
@@ -183,6 +267,13 @@ function App() {
             showContextMenu={showContextMenu}
             toggleMusic={toggleMusic}
             isMusicPlaying={isMusicPlaying}
+            userItems={userItems}
+            desktopSettings={desktopSettings}
+            selectedItem={selectedItem}
+            setSelectedItem={setSelectedItem}
+            activeFile={activeFile}
+            activeFolder={activeFolder}
+            saveFileContent={saveFileContent}
           />
           <Dock onOpenApp={openWindow} showNotification={showNotification} openWindows={openWindows} restoreWindow={restoreWindow} minimizeWindow={minimizeWindow} />
           
@@ -193,6 +284,26 @@ function App() {
                 y={contextMenu.y} 
                 onClose={hideContextMenu}
                 openWindow={openWindow}
+                desktopSettings={desktopSettings}
+                setDesktopSettings={setDesktopSettings}
+                showNotification={showNotification}
+                createFolder={createFolder}
+                createFile={createFile}
+                renameItem={renameItem}
+                deleteItem={deleteItem}
+                selectedItem={contextMenu.targetItem || selectedItem}
+                setRenameDialog={(dlg) => setRenameDialog(dlg)}
+                handleDesktopRefresh={handleDesktopRefresh}
+              />
+            )}
+          </AnimatePresence>
+
+          <AnimatePresence>
+            {renameDialog.show && (
+              <RenameDialog 
+                item={renameDialog.item}
+                onClose={() => setRenameDialog({ show: false, item: null })}
+                onRename={renameItem}
               />
             )}
           </AnimatePresence>
