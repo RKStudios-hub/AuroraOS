@@ -73,24 +73,24 @@ export default function DesktopWidget({ toggleMusic, isMusicPlaying }) {
         </div>
       </div>
 
-      {/* Clock Widget */}
+      {/* Clock Widget - Fixed height & stable layout */}
       <div className="fixed right-4 sm:right-12 top-1/2 -translate-y-1/2 z-0 text-white pointer-events-none select-none">
-        <div className="max-w-[90vw] md:w-[420px] p-6 sm:p-10 scale-90 sm:scale-100">
-          <div className="flex items-center gap-6 sm:gap-8">
+        <div className="max-w-[90vw] md:w-[420px] p-6 sm:p-10 scale-90 sm:scale-100 flex flex-col items-center">
+          <div className="flex items-center gap-6 sm:gap-8 h-40">
             {/* Time */}
-            <div className="leading-none">
-              <div className="text-6xl sm:text-8xl font-light text-lime-300 drop-shadow-lg">{formattedHours}</div>
-              <div className="text-6xl sm:text-8xl font-light text-pink-400 -mt-2 sm:-mt-4 drop-shadow-lg">{minutes}</div>
+            <div className="flex flex-col justify-center font-mono tabular-nums leading-none">
+              <div className="text-6xl sm:text-7xl font-light text-lime-300 drop-shadow-lg tracking-wider">{formattedHours}</div>
+              <div className="text-6xl sm:text-7xl font-light text-pink-400 mt-1 drop-shadow-lg tracking-wider">{minutes}</div>
             </div>
 
             {/* Divider */}
-            <div className="flex gap-1 h-24 sm:h-32">
+            <div className="flex gap-1 h-28">
               <div className="w-[2px] h-full bg-white/20"></div>
               <div className="w-[2px] h-full bg-white/20"></div>
             </div>
 
             {/* Side Info */}
-            <div className="text-xs sm:text-sm text-white/80 space-y-2">
+            <div className="text-xs sm:text-sm text-white/80 space-y-2 flex flex-col justify-center">
               <div className="text-base font-semibold">{ampm}</div>
               <div>
                 <i className="fa-solid fa-cloud-sun mr-1 text-yellow-300"></i>
@@ -100,8 +100,8 @@ export default function DesktopWidget({ toggleMusic, isMusicPlaying }) {
             </div>
           </div>
 
-          {/* Visualizer */}
-          <div className="flex justify-center gap-1 mt-6 sm:mt-8">
+          {/* Visualizer with fixed height wrapper to prevent vertical shifts */}
+          <div className="h-10 flex items-center justify-center gap-1.5 mt-6">
             <div className="w-[3px] bg-white/40 wave"></div>
             <div className="w-[3px] bg-white/40 wave" style={{ animationDelay: '0.1s' }}></div>
             <div className="w-[3px] bg-white/40 wave" style={{ animationDelay: '0.2s' }}></div>
@@ -115,7 +115,7 @@ export default function DesktopWidget({ toggleMusic, isMusicPlaying }) {
       <style>{`
         @keyframes wave {
           0%, 100% { height: 8px; opacity: 0.3; }
-          50% { height: 32px; opacity: 1; }
+          50% { height: 28px; opacity: 1; }
         }
         .wave {
           animation: wave 1.2s infinite ease-in-out;
