@@ -47,85 +47,67 @@ export default function DesktopWidget({ toggleMusic, isMusicPlaying }) {
   
   const formattedHours = hours.toString().padStart(2, '0');
   
-  const dateOptions = { weekday: 'long', day: 'numeric', month: 'long' };
+  const dateOptions = { weekday: 'short', day: 'numeric', month: 'short' };
   const dateStr = time.toLocaleDateString(undefined, dateOptions);
 
   return (
     <>
       {/* Music Widget */}
-      <div className="fixed bottom-2 left-4 z-20">
-        <div className="flex items-center gap-3 bg-black/40 backdrop-blur-md rounded-xl px-4 py-3 border border-white/10">
+      <div className="fixed bottom-16 sm:bottom-4 left-4 z-20">
+        <div className="flex items-center gap-3 bg-black/40 backdrop-blur-md rounded-xl px-3 py-2 sm:px-4 sm:py-3 border border-white/10 shadow-xl">
           <img 
             src="./music.png" 
             alt="Album" 
-            className="w-12 h-12 rounded-lg object-cover shadow-lg"
+            className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg object-cover shadow-lg"
           />
           <div className="text-white">
-            <div className="text-sm font-medium truncate max-w-[140px]">Sea of feelings</div>
-            <div className="text-xs text-white/60">Lowx - On repeat</div>
+            <div className="text-xs sm:text-sm font-medium truncate max-w-[120px] sm:max-w-[140px]">Sea of feelings</div>
+            <div className="text-[10px] sm:text-xs text-white/60">Lowx - On repeat</div>
           </div>
-          <div className="flex gap-2 ml-2 items-center">
-            <i className="fa-solid fa-repeat text-white/70 hover:text-white cursor-pointer transition text-sm"></i>
-            <i className="fa-solid fa-backward-step text-white/70 hover:text-white cursor-pointer transition text-sm"></i>
+          <div className="flex gap-2 ml-1 items-center">
             <i 
-              className={`fa-solid ${isMusicPlaying ? 'fa-pause' : 'fa-play'} text-white/70 hover:text-white cursor-pointer transition ml-1`}
+              className={`fa-solid ${isMusicPlaying ? 'fa-pause' : 'fa-play'} text-white/80 hover:text-white cursor-pointer transition text-xs sm:text-sm`}
               onClick={toggleMusic}
             ></i>
-            <i className="fa-solid fa-forward-step text-white/70 hover:text-white cursor-pointer transition ml-1 text-sm"></i>
           </div>
         </div>
       </div>
 
       {/* Clock Widget */}
-      <div className="fixed right-8 top-1/2 -translate-y-1/2 z-20 text-white">
-        <div 
-          className="w-[500px] h-[480px] px-20 py-16"
-        >
-          <div className="flex items-center gap-10">
+      <div className="fixed right-4 sm:right-12 top-1/2 -translate-y-1/2 z-0 text-white pointer-events-none select-none">
+        <div className="max-w-[90vw] md:w-[420px] p-6 sm:p-10 scale-90 sm:scale-100">
+          <div className="flex items-center gap-6 sm:gap-8">
             {/* Time */}
             <div className="leading-none">
-              <div className="text-[120px] font-light text-lime-300">{formattedHours}</div>
-              <div className="text-[120px] font-light text-pink-400 -mt-4">{minutes}</div>
+              <div className="text-6xl sm:text-8xl font-light text-lime-300 drop-shadow-lg">{formattedHours}</div>
+              <div className="text-6xl sm:text-8xl font-light text-pink-400 -mt-2 sm:-mt-4 drop-shadow-lg">{minutes}</div>
             </div>
 
             {/* Divider */}
-            <div className="flex gap-1 h-36">
-              <div className="w-[3px] h-full bg-white/20"></div>
-              <div className="w-[3px] h-full bg-white/20"></div>
-              <div className="w-[3px] h-full bg-white/20"></div>
+            <div className="flex gap-1 h-24 sm:h-32">
+              <div className="w-[2px] h-full bg-white/20"></div>
+              <div className="w-[2px] h-full bg-white/20"></div>
             </div>
 
             {/* Side Info */}
-            <div className="text-base text-white/80 space-y-3">
-              <div className="text-lg">{ampm}</div>
+            <div className="text-xs sm:text-sm text-white/80 space-y-2">
+              <div className="text-base font-semibold">{ampm}</div>
               <div>
-                <i className="fa-solid fa-cloud-sun mr-1"></i>
+                <i className="fa-solid fa-cloud-sun mr-1 text-yellow-300"></i>
                 {weatherLoading ? '...' : weather !== null ? `${weather}°C` : 'N/A'}
               </div>
-              <div>{dateStr}</div>
+              <div className="whitespace-nowrap">{dateStr}</div>
             </div>
           </div>
 
-          {/* Icons */}
-          <div className="flex justify-center gap-8 mt-8 text-lg text-white/70">
-            <i className="fa-solid fa-comment hover:text-white hover:-translate-y-1 transition cursor-pointer"></i>
-            <i className="fa-solid fa-camera hover:text-white hover:-translate-y-1 transition cursor-pointer"></i>
-            <i className="fa-solid fa-music hover:text-white hover:-translate-y-1 transition cursor-pointer"></i>
-            <i className="fa-solid fa-gamepad hover:text-white hover:-translate-y-1 transition cursor-pointer"></i>
-            <i className="fab fa-facebook hover:text-white hover:-translate-y-1 transition cursor-pointer"></i>
-            <i className="fab fa-twitter hover:text-white hover:-translate-y-1 transition cursor-pointer"></i>
-            <i className="fab fa-youtube hover:text-white hover:-translate-y-1 transition cursor-pointer"></i>
-          </div>
-
           {/* Visualizer */}
-          <div className="flex justify-center gap-1 mt-12">
-            <div className="w-[3px] bg-white/50 wave"></div>
-            <div className="w-[3px] bg-white/50 wave" style={{ animationDelay: '0.1s' }}></div>
-            <div className="w-[3px] bg-white/50 wave" style={{ animationDelay: '0.2s' }}></div>
-            <div className="w-[3px] bg-white/50 wave" style={{ animationDelay: '0.3s' }}></div>
-            <div className="w-[3px] bg-white/50 wave" style={{ animationDelay: '0.4s' }}></div>
-            <div className="w-[3px] bg-white/50 wave" style={{ animationDelay: '0.5s' }}></div>
-            <div className="w-[3px] bg-white/50 wave" style={{ animationDelay: '0.6s' }}></div>
+          <div className="flex justify-center gap-1 mt-6 sm:mt-8">
+            <div className="w-[3px] bg-white/40 wave"></div>
+            <div className="w-[3px] bg-white/40 wave" style={{ animationDelay: '0.1s' }}></div>
+            <div className="w-[3px] bg-white/40 wave" style={{ animationDelay: '0.2s' }}></div>
+            <div className="w-[3px] bg-white/40 wave" style={{ animationDelay: '0.3s' }}></div>
+            <div className="w-[3px] bg-white/40 wave" style={{ animationDelay: '0.4s' }}></div>
+            <div className="w-[3px] bg-white/40 wave" style={{ animationDelay: '0.5s' }}></div>
           </div>
         </div>
       </div>
@@ -133,7 +115,7 @@ export default function DesktopWidget({ toggleMusic, isMusicPlaying }) {
       <style>{`
         @keyframes wave {
           0%, 100% { height: 8px; opacity: 0.3; }
-          50% { height: 40px; opacity: 1; }
+          50% { height: 32px; opacity: 1; }
         }
         .wave {
           animation: wave 1.2s infinite ease-in-out;

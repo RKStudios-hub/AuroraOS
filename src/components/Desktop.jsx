@@ -46,21 +46,35 @@ function DraggableIcon({ item, onOpen, index, iconSize = 'medium', onSelect, isS
   };
 
   const grid = getGridConfig();
-  const [position, setPosition] = useState({ x: 0, y: index * grid.size });
+
+  // Column wrapping math to prevent icons going below screen
+  const calculatePosition = (idx) => {
+    const screenH = typeof window !== 'undefined' ? window.innerHeight : 800;
+    const availableH = Math.max(200, screenH - 140);
+    const rowsPerCol = Math.max(1, Math.floor(availableH / grid.size));
+    const col = Math.floor(idx / rowsPerCol);
+    const row = idx % rowsPerCol;
+    return {
+      x: col * (grid.width + 16),
+      y: row * grid.size,
+    };
+  };
+
+  const [position, setPosition] = useState(() => calculatePosition(index));
   const [isDragging, setIsDragging] = useState(false);
   const dragStart = useRef({ x: 0, y: 0 });
   const iconStart = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
-    setPosition({ x: 0, y: index * grid.size });
-  }, [index, grid.size]);
+    setPosition(calculatePosition(index));
+  }, [index, grid.size, grid.width]);
 
   const snapToGrid = (val) => Math.round(val / grid.size) * grid.size;
 
   const handleMouseDown = (e) => {
     e.stopPropagation();
     onSelect?.(item);
-    if (e.button !== 0) return; // Only drag on left click
+    if (e.button !== 0) return;
     e.preventDefault();
     setIsDragging(true);
     dragStart.current = { x: e.clientX, y: e.clientY };
@@ -105,7 +119,7 @@ function DraggableIcon({ item, onOpen, index, iconSize = 'medium', onSelect, isS
       }`}
       style={{ 
         left: 16 + position.x, 
-        top: 56 + position.y,
+        top: 48 + position.y,
         width: grid.width,
         transition: isDragging ? 'none' : 'all 0.15s ease-out',
       }}
@@ -171,10 +185,8 @@ export default function Desktop({
     return 0;
   });
 
-  // Combine default apps with user items
   const allItems = [...defaultApps, ...userItems];
 
-  // Sorting logic
   const sortedItems = [...allItems].sort((a, b) => {
     const nameA = (a.label || a.name || '').toLowerCase();
     const nameB = (b.label || b.name || '').toLowerCase();
