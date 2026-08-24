@@ -2,56 +2,35 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { fetchAllProjects } from '../services/projectService';
 
-const getFolderIconColor = (catId, activeCategory) => {
-  if (activeCategory === catId) return '#2563eb';
-  return 'currentColor';
-};
-
-const GitHubFolderIcon = ({ color }) => (
-  <svg viewBox="0 0 432 416" style={{ width: '14px', height: '14px' }}>
-    <path fill={color} d="M213.5 0q88.5 0 151 62.5T427 213q0 70-41 125.5T281 416q-14 2-14-11v-58q0-27-15-40q44-5 70.5-27t26.5-77q0-34-22-58q11-26-2-57q-18-5-58 22q-26-7-54-7t-53 7q-18-12-32.5-17.5T107 88h-6q-12 31-2 57q-22 24-22 58q0 55 27 77t70 27q-11 10-13 29q-42 18-62-18q-12-20-33-22q-2 0-4.5.5t-5 3.5t8.5 9q14 7 23 31q1 2 2 4.5t6.5 9.5t13 10.5T130 371t30-2v36q0 13-14 11q-64-22-105-77.5T0 213q0-88 62.5-150.5T213.5 0z"/>
+// Content SVG Icons for Projects
+const GitHubSVG = () => (
+  <svg viewBox="0 0 24 24" className="w-10 h-10 drop-shadow-md">
+    <path fill="#24292E" d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
   </svg>
 );
 
-const YouTubeFolderIcon = ({ color }) => (
-  <svg viewBox="0 0 1024 768" style={{ width: '14px', height: '14px' }}>
-    <path fill={color} d="M928 736q-222 32-416 32q-86 0-190-8t-165-16l-61-8q-27-5-47.5-37.5t-30-78.5t-14-86T0 461V307Q0 52 96 32Q318 0 512 0q86 0 190 8t165 16l61 8q29 4 49.5 36.5T1007 148t13 86t4 73v154q0 36-3 73t-12 85t-30 80t-51 37zM693 359L431 199q-11-10-29-5.5T384 208v352q0 11 18 15t29-6l262-160q11-10 11-25t-11-25z"/>
+const YouTubeSVG = () => (
+  <svg viewBox="0 0 24 24" className="w-10 h-10 drop-shadow-md">
+    <path fill="#FF0000" d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
   </svg>
 );
 
-const SketchfabFolderIcon = ({ color }) => (
-  <svg viewBox="0 0 24 24" style={{ width: '14px', height: '14px' }}>
-    <path fill={color} d="M11.3 0A11.983 11.983 0 0 0 .037 11a13.656 13.656 0 0 0 0 2a11.983 11.983 0 0 0 11.29 11h1.346a12.045 12.045 0 0 0 11.3-11.36a13.836 13.836 0 0 0 0-1.7A12.049 12.049 0 0 0 12.674 0zM15 6.51l2.99 1.74s-6.064 3.24-6.084 3.24S5.812 8.27 5.8 8.26l2.994-1.77l2.992-1.76zm-6.476 5.126L11 13v5.92l-2.527-1.4l-2.46-1.43v-5.76zm9.461 1.572v2.924L15.5 17.574L13 19.017v-6.024l2.489-1.345l2.5-1.355z"/>
+const SketchfabSVG = () => (
+  <svg viewBox="0 0 24 24" className="w-10 h-10 drop-shadow-md">
+    <path fill="#1CAAD9" d="M12 0L1.6 6v12L12 24l10.4-6V6L12 0zm-1.2 3.2L18 7.3l-3 1.7-7.2-4.1 3-1.7zm-6.6 4.8l7.2 4.1v7.6l-7.2-4.2V8zm15.6 7.5l-7.2 4.2v-7.6l7.2-4.1v7.5z" />
   </svg>
 );
 
-const ModrinthFolderIcon = ({ color }) => (
-  <svg viewBox="0 0 24 24" style={{ width: '14px', height: '14px' }}>
-    <path fill={color} d="M12.252.004a11.78 11.768 0 0 0-8.92 3.73a11 10.999 0 0 0-2.17 3.11a11.37 11.359 0 0 0-1.16 5.169c0 1.42.17 2.5.6 3.77c.24.759.77 1.899 1.17 2.529a12.3 12.298 0 0 0 8.85 5.639c.44.05 2.54.07 2.76.02c.2-.04.22.1-.26-1.7l-.36-1.37l-1.01-.06a8.5 8.489 0 0 1-5.18-1.8a5.34 5.34 0 0 1-1.3-1.26c0-.05.34-.28.74-.5a37.572 37.545 0 0 1 2.88-1.629c.03 0 .5.45 1.06.98l1 .97l2.07-.43l2.06-.43l1.47-1.47c.8-.8 1.48-1.5 1.48-1.52c0-.09-.42-1.63-.46-1.7c-.04-.06-.2-.03-1.02.18c-.53.13-1.2.3-1.45.4l-.48.15l-.53.53l-.53.53l-.93.1l-.93.07l-.52-.5a2.7 2.7 0 0 1-.96-1.7l-.13-.6l.43-.57c.68-.9.68-.9 1.46-1.1c.4-.1.65-.2.83-.33c.13-.099.65-.579 1.14-1.069l.9-.9l-.7-.7l-.7-.7l-1.95.54c-1.07.3-1.96.53-1.97.53c-.03 0-2.23 2.48-2.63 2.97l-.29.35l.28 1.03c.16.56.3 1.16.31 1.34l.03.3l-.34.23c-.37.23-2.22 1.3-2.84 1.63c-.36.2-.37.2-.44.1c-.08-.1-.23-.6-.32-1.03c-.18-.86-.17-2.75.02-3.73a8.84 8.839 0 0 1 7.9-6.93c.43-.03.77-.08.78-.1c.06-.17.5-2.999.47-3.039c-.01-.02-.1-.02-.2-.03Zm3.68.67c-.2 0-.3.1-.37.38c-.06.23-.46 2.42-.46 2.52c0 .04.1.11.22.16a8.51 8.499 0 0 1 2.99 2a8.38 8.379 0 0 1 2.16 3.449a6.9 6.9 0 0 1 .4 2.8c0 1.07 0 1.27-.1 1.73a9.37 9.369 0 0 1-1.76 3.769c-.32.4-.98 1.06-1.37 1.38c-.38.32-1.54 1.1-1.7 1.14c-.1.03-.1.06-.07.26c.03.18.64 2.56.7 2.78l.06.06a12.07 12.058 0 0 0 7.27-9.4c.13-.77.13-2.58 0-3.4a11.96 11.948 0 0 0-5.73-8.578c-.7-.42-2.05-1.06-2.25-1.06Z"/>
+const ModrinthSVG = () => (
+  <svg viewBox="0 0 24 24" className="w-10 h-10 drop-shadow-md">
+    <path fill="#57C585" d="M12.252.004a11.78 11.768 0 0 0-8.92 3.73a11 10.999 0 0 0-2.17 3.11a11.37 11.359 0 0 0-1.16 5.169c0 1.42.17 2.5.6 3.77c.24.759.77 1.899 1.17 2.529a12.3 12.298 0 0 0 8.85 5.639c.44.05 2.54.07 2.76.02c.2-.04.22.1-.26-1.7l-.36-1.37l-1.01-.06a8.5 8.489 0 0 1-5.18-1.8a5.34 5.34 0 0 1-1.3-1.26c0-.05.34-.28.74-.5a37.572 37.545 0 0 1 2.88-1.629c.03 0 .5.45 1.06.98l1 .97l2.07-.43l2.06-.43l1.47-1.47c.8-.8 1.48-1.5 1.48-1.52c0-.09-.42-1.63-.46-1.7c-.04-.06-.2-.03-1.02.18c-.53.13-1.2.3-1.45.4l-.48.15l-.53.53l-.53.53l-.93.1l-.93.07l-.52-.5a2.7 2.7 0 0 1-.96-1.7l-.13-.6l.43-.57c.68-.9.68-.9 1.46-1.1c.4-.1.65-.2.83-.33c.13-.099.65-.579 1.14-1.069l.9-.9l-.7-.7l-.7-.7l-1.95.54c-1.07.3-1.96.53-1.97.53c-.03 0-2.23 2.48-2.63 2.97l-.29.35l.28 1.03c.16.56.3 1.16.31 1.34l.03.3l-.34.23c-.37.23-2.22 1.3-2.84 1.63c-.36.2-.37.2-.44.1c-.08-.1-.23-.6-.32-1.03c-.18-.86-.17-2.75.02-3.73a8.84 8.839 0 0 1 7.9-6.93c.43-.03.77-.08.78-.1c.06-.17.5-2.999.47-3.039c-.01-.02-.1-.02-.2-.03Zm3.68.67c-.2 0-.3.1-.37.38c-.06.23-.46 2.42-.46 2.52c0 .04.1.11.22.16a8.51 8.499 0 0 1 2.99 2a8.38 8.379 0 0 1 2.16 3.449a6.9 6.9 0 0 1 .4 2.8c0 1.07 0 1.27-.1 1.73a9.37 9.369 0 0 1-1.76 3.769c-.32.4-.98 1.06-1.37 1.38c-.38.32-1.54 1.1-1.7 1.14c-.1.03-.1.06-.07.26c.03.18.64 2.56.7 2.78l.06.06a12.07 12.058 0 0 0 7.27-9.4c.13-.77.13-2.58 0-3.4a11.96 11.948 0 0 0-5.73-8.578c-.7-.42-2.05-1.06-2.25-1.06Z" />
   </svg>
 );
 
-const GitHubProjectIcon = ({ color }) => (
-  <svg viewBox="0 0 640 640" style={{ width: '24px', height: '24px' }}>
-    <path fill={color} d="M192 64C156.7 64 128 92.7 128 128L128 512C128 547.3 156.7 576 192 576L448 576C483.3 576 512 547.3 512 512L512 234.5C512 217.5 505.3 201.2 493.3 189.2L386.7 82.7C374.7 70.7 358.5 64 341.5 64L192 64zM453.5 240L360 240C346.7 240 336 229.3 336 216L336 122.5L453.5 240z"/>
-  </svg>
-);
-
-const YouTubeProjectIcon = ({ color }) => (
-  <svg viewBox="0 0 8 8" style={{ width: '24px', height: '24px' }}>
-    <path fill={color} d="M.5 1c-.28 0-.5.23-.5.5v4c0 .28.23.5.5.5h5c.28 0 .5-.22.5-.5V4l1 1h1V2H7L6 3V1.5c0-.28-.22-.5-.5-.5h-5z"/>
-  </svg>
-);
-
-const SketchfabProjectIcon = ({ color }) => (
-  <svg viewBox="0 0 24 24" style={{ width: '24px', height: '24px' }}>
-    <path fill={color} fillRule="evenodd" d="m9.675 19.34l-3-2.144c-.821-.586-1.232-.88-1.453-1.31C5 15.456 5 14.95 5 13.942v-3.883c0-.322 0-.592.007-.825L11 13.514v6.717c-.357-.2-.773-.498-1.325-.892m3.325.346l3-2.143c.821-.586 1.232-.88 1.453-1.31c.222-.43.222-.935.222-1.944v-3.883c0-.322 0-.592-.007-.825L13 13.514zm5.128-12.837L12 11.771L5.872 7.394c.212-.168.475-.356.803-.59l3-2.143C10.798 3.859 11.36 3.458 12 3.458c.64 0 1.202.4 2.325 1.203l3 2.143c.329.234.591.422.803.59" clipRule="evenodd"/>
-  </svg>
-);
-
-const ModrinthProjectIcon = ({ color }) => (
-  <svg viewBox="0 0 24 24" style={{ width: '24px', height: '24px' }}>
-    <path fill={color} d="M4 2h16a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2m2 4v4h4v2H8v6h2v-2h4v2h2v-6h-2v-2h4V6h-4v4h-4V6H6Z"/>
+const FolderSVG = () => (
+  <svg viewBox="0 0 64 64" className="w-10 h-10 drop-shadow-md">
+    <path fill="#FFC107" d="M56 16H28l-4-6H8c-2.2 0-4 1.8-4 4v36c0 2.2 1.8 4 4 4h48c2.2 0 4-1.8 4-4V20c0-2.2-1.8-4-4-4z" />
+    <path fill="#FFD54F" d="M56 20H8c-2.2 0-4 1.8-4 4v32c0 2.2 1.8 4 4 4h48c2.2 0 4-1.8 4-4V24c0-2.2-1.8-4-4-4z" />
   </svg>
 );
 
@@ -67,7 +46,7 @@ export default function ProjectsWindow() {
   const [activeCategory, setActiveCategory] = useState('all');
   const [projects, setProjects] = useState({ github: [], modrinth: [], sketchfab: [], youtube: [] });
   const [loading, setLoading] = useState(true);
-  const [selectedProject, setSelectedProject] = useState(null); // Clicked thumbnail preview modal
+  const [selectedProject, setSelectedProject] = useState(null); // Clicked PowerToys preview
 
   useEffect(() => {
     async function loadProjects() {
@@ -89,16 +68,6 @@ export default function ProjectsWindow() {
     ? allProjects 
     : allProjects.filter(p => p.category === activeCategory);
 
-  const getProjectColor = (category) => {
-    switch(category) {
-      case 'github': return 'linear-gradient(135deg, #24292e, #333)';
-      case 'modrinth': return 'linear-gradient(135deg, #57c585, #57c585)';
-      case 'sketchfab': return 'linear-gradient(135deg, #1caad9, #1caad9)';
-      case 'youtube': return 'linear-gradient(135deg, #ff0000, #cc0000)';
-      default: return 'linear-gradient(135deg, #00a8ff, #0099ff)';
-    }
-  };
-
   const getBadgeColor = (category) => {
     switch(category) {
       case 'youtube': return 'bg-red-500 text-white';
@@ -106,6 +75,16 @@ export default function ProjectsWindow() {
       case 'github': return 'bg-slate-800 text-white';
       case 'modrinth': return 'bg-emerald-500 text-white';
       default: return 'bg-blue-500 text-white';
+    }
+  };
+
+  const renderSVGIcon = (cat) => {
+    switch(cat) {
+      case 'github': return <GitHubSVG />;
+      case 'youtube': return <YouTubeSVG />;
+      case 'sketchfab': return <SketchfabSVG />;
+      case 'modrinth': return <ModrinthSVG />;
+      default: return <FolderSVG />;
     }
   };
 
@@ -118,7 +97,7 @@ export default function ProjectsWindow() {
   }
 
   return (
-    <div className="flex h-full select-none relative" style={{ background: '#ffffff' }}>
+    <div className="flex h-full select-none relative overflow-hidden" style={{ background: '#ffffff' }}>
       {/* Sidebar - Original Layout */}
       <div 
         className="w-40 p-2 flex flex-col gap-0.5"
@@ -127,25 +106,24 @@ export default function ProjectsWindow() {
         {categories.map((cat) => (
           <button
             key={cat.id}
-            onClick={() => setActiveCategory(cat.id)}
+            onClick={() => {
+              setActiveCategory(cat.id);
+              setSelectedProject(null);
+            }}
             className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm transition-all text-left ${
               activeCategory === cat.id 
                 ? 'bg-blue-100 text-blue-600 font-medium' 
                 : 'text-black/50 hover:bg-black/5 hover:text-black'
             }`}
           >
-            {cat.id === 'github' && <GitHubFolderIcon color={getFolderIconColor(cat.id, activeCategory)} />}
-            {cat.id === 'youtube' && <YouTubeFolderIcon color={getFolderIconColor(cat.id, activeCategory)} />}
-            {cat.id === 'sketchfab' && <SketchfabFolderIcon color={getFolderIconColor(cat.id, activeCategory)} />}
-            {cat.id === 'modrinth' && <ModrinthFolderIcon color={getFolderIconColor(cat.id, activeCategory)} />}
-            {cat.id === 'all' && <i className="fas fa-folder text-xs w-4 text-yellow-500" />}
+            <i className={`fab ${cat.iconClass} text-xs w-4 ${cat.id === 'youtube' ? 'text-red-500' : cat.id === 'sketchfab' ? 'text-cyan-500' : 'text-blue-500'}`} />
             <span className="text-xs">{cat.label}</span>
           </button>
         ))}
       </div>
 
-      {/* Content Area - Original Grid Layout */}
-      <div className="flex-1 p-4 h-full overflow-auto">
+      {/* Main Grid Content Area */}
+      <div className="flex-1 p-4 h-full overflow-auto flex flex-col">
         {/* Path bar */}
         <div className="flex items-center gap-1 text-xs text-black/40 mb-4">
           <i className="fas fa-folder text-yellow-500" />
@@ -154,8 +132,8 @@ export default function ProjectsWindow() {
           <span className="text-black/60">{categories.find(c => c.id === activeCategory)?.label}</span>
         </div>
 
-        {/* Grid - Original File Explorer Style */}
-        <div className="grid gap-3 p-1" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(84px, 1fr))' }}>
+        {/* Content SVG Icons Grid */}
+        <div className="grid gap-3 p-1 flex-1" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(88px, 1fr))' }}>
           <AnimatePresence>
             {filteredProjects.map((project, index) => (
               <motion.div
@@ -167,35 +145,16 @@ export default function ProjectsWindow() {
                 transition={{ delay: index * 0.02 }}
                 whileHover={{ y: -2 }}
                 onClick={() => setSelectedProject(project)}
-                className="flex flex-col items-center gap-1.5 p-1.5 rounded-xl cursor-pointer group hover:bg-slate-100 transition-colors"
+                className={`flex flex-col items-center gap-1.5 p-2 rounded-xl cursor-pointer group transition-all ${
+                  selectedProject?.id === project.id 
+                    ? 'bg-blue-50 border border-blue-300 shadow-sm ring-2 ring-blue-500/20' 
+                    : 'hover:bg-slate-100 border border-transparent'
+                }`}
               >
-                <div 
-                  className="rounded-xl flex items-center justify-center shadow-md overflow-hidden relative"
-                  style={{ 
-                    width: 'min(6vw, 68px)',
-                    aspectRatio: '1',
-                    background: getProjectColor(project.category),
-                  }}
-                >
-                  {project.thumbnail ? (
-                    <img 
-                      src={project.thumbnail} 
-                      alt={project.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                      onError={(e) => {
-                        e.target.style.display = 'none';
-                      }}
-                    />
-                  ) : (
-                    <>
-                      {project.category === 'github' && <GitHubProjectIcon color="#fff" />}
-                      {project.category === 'youtube' && <YouTubeProjectIcon color="#fff" />}
-                      {project.category === 'sketchfab' && <SketchfabProjectIcon color="#fff" />}
-                      {project.category === 'modrinth' && <ModrinthProjectIcon color="#fff" />}
-                    </>
-                  )}
+                <div className="w-12 h-12 flex items-center justify-center">
+                  {renderSVGIcon(project.category)}
                 </div>
-                <span className="text-xs text-black/70 font-medium text-center group-hover:text-black truncate w-full">
+                <span className="text-xs text-black/80 font-medium text-center group-hover:text-blue-600 truncate w-full">
                   {project.title}
                 </span>
               </motion.div>
@@ -210,67 +169,68 @@ export default function ProjectsWindow() {
         )}
       </div>
 
-      {/* Thumbnail Detail Preview Modal (Pops up when project is clicked) */}
+      {/* Windows PowerToys Style Preview Sidebar Pane */}
       <AnimatePresence>
         {selectedProject && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm"
-              onClick={() => setSelectedProject(null)}
-            />
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 15 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 15 }}
-              className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden z-10 flex flex-col"
+          <motion.div
+            initial={{ x: 260, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: 260, opacity: 0 }}
+            className="w-68 bg-slate-50 border-l border-slate-200 p-4 flex flex-col gap-3 shadow-xl z-20 overflow-y-auto"
+          >
+            {/* Sidebar Header */}
+            <div className="flex items-center justify-between border-b border-slate-200 pb-2">
+              <div className="flex items-center gap-1.5 text-xs font-bold text-slate-700">
+                <i className="fas fa-eye text-blue-500" /> PowerToys Peek
+              </div>
+              <button
+                onClick={() => setSelectedProject(null)}
+                className="w-6 h-6 rounded-full hover:bg-slate-200 text-slate-500 flex items-center justify-center"
+              >
+                <i className="fas fa-times text-xs" />
+              </button>
+            </div>
+
+            {/* High Resolution Media Thumbnail */}
+            <div className="relative w-full aspect-video rounded-xl bg-slate-200 border border-slate-300 overflow-hidden shadow-inner">
+              <img 
+                src={selectedProject.thumbnail} 
+                alt={selectedProject.title}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.target.src = 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80';
+                }}
+              />
+              <span className={`absolute top-2 left-2 px-2 py-0.5 rounded-full text-[9px] font-bold ${getBadgeColor(selectedProject.category)} shadow-sm`}>
+                {selectedProject.category.toUpperCase()}
+              </span>
+            </div>
+
+            {/* Project Details */}
+            <div className="flex flex-col gap-1.5 text-xs">
+              <h3 className="font-bold text-slate-800 leading-snug">{selectedProject.title}</h3>
+              <p className="text-[11px] text-slate-500 leading-relaxed">{selectedProject.description}</p>
+              
+              {/* Stats */}
+              <div className="flex flex-wrap gap-2.5 text-[11px] text-slate-600 font-medium pt-2 border-t border-slate-200 mt-1">
+                {selectedProject.stars && <span>⭐ {selectedProject.stars} stars</span>}
+                {selectedProject.views && <span>👁️ {selectedProject.views} views</span>}
+                {selectedProject.likes && <span>❤️ {selectedProject.likes} likes</span>}
+                {selectedProject.downloads && <span>📥 {selectedProject.downloads} downloads</span>}
+              </div>
+            </div>
+
+            {/* Action Link Button */}
+            <a
+              href={selectedProject.url}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-auto w-full py-2.5 rounded-xl bg-blue-600 text-white font-semibold text-xs text-center hover:bg-blue-700 transition-colors shadow-md shadow-blue-500/20 flex items-center justify-center gap-2"
             >
-              {/* Thumbnail Image Header */}
-              <div className="relative aspect-video w-full bg-slate-900 overflow-hidden">
-                <img 
-                  src={selectedProject.thumbnail} 
-                  alt={selectedProject.title}
-                  className="w-full h-full object-cover"
-                />
-                <button
-                  onClick={() => setSelectedProject(null)}
-                  className="absolute top-3 right-3 w-7 h-7 rounded-full bg-black/60 text-white flex items-center justify-center hover:bg-black transition-colors"
-                >
-                  <i className="fas fa-times text-xs" />
-                </button>
-                <span className={`absolute bottom-3 left-3 px-2.5 py-0.5 rounded-full text-xs font-bold ${getBadgeColor(selectedProject.category)}`}>
-                  {selectedProject.category.toUpperCase()}
-                </span>
-              </div>
-
-              {/* Detail Content */}
-              <div className="p-4 flex flex-col gap-2">
-                <h2 className="text-sm font-bold text-slate-900">{selectedProject.title}</h2>
-                <p className="text-xs text-slate-600 leading-relaxed">{selectedProject.description}</p>
-                
-                {/* Stats */}
-                <div className="flex flex-wrap gap-3 text-xs text-slate-500 pt-2 border-t border-slate-100">
-                  {selectedProject.stars && <span>⭐ <b>{selectedProject.stars}</b> Stars</span>}
-                  {selectedProject.views && <span>👁️ <b>{selectedProject.views}</b> Views</span>}
-                  {selectedProject.likes && <span>❤️ <b>{selectedProject.likes}</b> Likes</span>}
-                  {selectedProject.downloads && <span>📥 <b>{selectedProject.downloads}</b> Downloads</span>}
-                </div>
-
-                {/* External Action Button */}
-                <a
-                  href={selectedProject.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-2 w-full py-2 rounded-xl bg-blue-600 text-white font-semibold text-xs text-center hover:bg-blue-700 transition-colors shadow-md shadow-blue-500/20 flex items-center justify-center gap-2"
-                >
-                  <span>Open {selectedProject.category.toUpperCase()} Project</span>
-                  <i className="fas fa-external-link-alt text-[10px]" />
-                </a>
-              </div>
-            </motion.div>
-          </div>
+              <span>Open {selectedProject.category.toUpperCase()} Project</span>
+              <i className="fas fa-external-link-alt text-[10px]" />
+            </a>
+          </motion.div>
         )}
       </AnimatePresence>
     </div>
