@@ -1,29 +1,27 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// Content SVG Vector Icons
-const FolderSVG = () => (
-  <svg viewBox="0 0 64 64" className="w-10 h-10 drop-shadow-md">
-    <path fill="#FFC107" d="M56 16H28l-4-6H8c-2.2 0-4 1.8-4 4v36c0 2.2 1.8 4 4 4h48c2.2 0 4-1.8 4-4V20c0-2.2-1.8-4-4-4z" />
-    <path fill="#FFD54F" d="M56 20H8c-2.2 0-4 1.8-4 4v32c0 2.2 1.8 4 4 4h48c2.2 0 4-1.8 4-4V24c0-2.2-1.8-4-4-4z" />
-  </svg>
+// Content SVG Icons matching system aesthetics
+const FolderIconBlock = () => (
+  <div className="w-16 h-16 rounded-xl flex items-center justify-center bg-gradient-to-br from-amber-400 to-amber-500 shadow-md">
+    <i className="fas fa-folder text-white text-2xl" />
+  </div>
 );
 
-const FileTextSVG = () => (
-  <svg viewBox="0 0 64 64" className="w-10 h-10 drop-shadow-md">
-    <path fill="#90CAF9" d="M48 64H16c-2.2 0-4-1.8-4-4V4c0-2.2 1.8-4 4-4h20l16 16v44c0 2.2-1.8 4-4 4z" />
-    <path fill="#E3F2FD" d="M44 60H20c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2h14l12 12v42c0 1.1-.9 2-2 2z" />
-    <path fill="#42A5F5" d="M36 0v16h16z" />
-    <path fill="#1E88E5" d="M24 24h16v4H24zm0 8h16v4H24zm0 8h12v4H24z" />
-  </svg>
+const FileTextIconBlock = () => (
+  <div className="w-16 h-16 rounded-xl flex items-center justify-center bg-gradient-to-br from-blue-400 to-indigo-500 shadow-md">
+    <i className="fas fa-file-alt text-white text-2xl" />
+  </div>
 );
 
-const ImageSVG = () => (
-  <svg viewBox="0 0 64 64" className="w-10 h-10 drop-shadow-md">
-    <rect width="56" height="48" x="4" y="8" fill="#81C784" rx="4" />
-    <circle cx="20" cy="24" r="6" fill="#FFF59D" />
-    <path fill="#388E3C" d="M12 48l12-16 8 10 12-14 8 20z" />
-  </svg>
+const ImageIconBlock = ({ thumbnail }) => (
+  <div className="w-16 h-16 rounded-xl flex items-center justify-center bg-slate-800 shadow-md overflow-hidden relative">
+    {thumbnail ? (
+      <img src={thumbnail} alt="Preview" className="w-full h-full object-cover" />
+    ) : (
+      <i className="fas fa-image text-emerald-400 text-2xl" />
+    )}
+  </div>
 );
 
 export default function FolderWindow({ 
@@ -37,7 +35,7 @@ export default function FolderWindow({
 }) {
   const [items, setItems] = useState(initialItems.length > 0 ? initialItems : [
     { id: 'f_sub1', name: 'Projects & Docs', type: 'folder', createdAt: Date.now() - 5000 },
-    { id: 'f_doc1', name: 'Readme.txt', type: 'file', content: 'Welcome to your File Explorer folder!\nDrag and drop files here or right click to create new files.', createdAt: Date.now(), size: 85 },
+    { id: 'f_doc1', name: 'Readme.txt', type: 'file', content: 'Welcome to your File Explorer folder!\nRight-click inside this tab to create new folders and text files.', createdAt: Date.now(), size: 85 },
     { id: 'f_img1', name: 'Wallpaper_Preview.png', type: 'image', thumbnail: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=400&q=80', createdAt: Date.now() - 2000, size: 240 },
   ]);
   const [activeNav, setActiveNav] = useState('home');
@@ -45,6 +43,7 @@ export default function FolderWindow({
   const [isDragOver, setIsDragOver] = useState(false);
   const [contextMenu, setContextMenu] = useState({ show: false, x: 0, y: 0, targetItem: null });
 
+  // Handle Drag & Drop
   const handleDrop = (e) => {
     e.preventDefault();
     setIsDragOver(false);
@@ -105,7 +104,7 @@ export default function FolderWindow({
 
   return (
     <div 
-      className="flex h-full select-none relative overflow-hidden text-slate-800"
+      className="flex h-full min-h-0 select-none relative overflow-hidden text-slate-800"
       style={{ background: '#ffffff' }}
       onDrop={handleDrop}
       onDragOver={handleDragOver}
@@ -115,7 +114,7 @@ export default function FolderWindow({
     >
       {/* Left Sidebar - Exact Projects Window Style */}
       <div 
-        className="w-40 p-2 flex flex-col gap-0.5"
+        className="w-40 p-2 flex flex-col gap-0.5 shrink-0"
         style={{ background: 'rgba(0,0,0,0.03)' }}
       >
         <button
@@ -147,10 +146,10 @@ export default function FolderWindow({
         </button>
       </div>
 
-      {/* Main Content Area - Balanced Padding */}
-      <div className="flex-1 p-3.5 h-full overflow-y-auto flex flex-col">
-        {/* Path bar & Action Controls */}
-        <div className="flex items-center justify-between mb-3">
+      {/* Main Content Area - Fluid Padding for Maximized Window States */}
+      <div className="flex-1 flex flex-col h-full min-h-0 p-4 overflow-y-auto">
+        {/* Path bar & Action Buttons */}
+        <div className="flex items-center justify-between mb-3 shrink-0">
           <div className="flex items-center gap-1 text-xs text-black/40">
             <i className="fas fa-folder text-yellow-500" />
             <span>Home</span>
@@ -158,7 +157,6 @@ export default function FolderWindow({
             <span className="text-black/60 font-medium">{folder.name}</span>
           </div>
 
-          {/* Quick Creation Buttons */}
           <div className="flex items-center gap-1.5">
             <button
               onClick={handleCreateNewFolder}
@@ -175,16 +173,16 @@ export default function FolderWindow({
           </div>
         </div>
 
-        {/* Content SVG Grid */}
+        {/* Content SVG Icons Grid */}
         <div 
-          className={`grid gap-3 p-1 flex-1 transition-colors ${isDragOver ? 'bg-blue-50/50 rounded-xl border-2 border-dashed border-blue-400' : ''}`}
-          style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(88px, 1fr))' }}
+          className={`grid gap-3 p-1 flex-1 min-h-0 transition-colors ${isDragOver ? 'bg-blue-50/50 rounded-xl border-2 border-dashed border-blue-400' : ''}`}
+          style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(84px, 1fr))', alignContent: 'start' }}
           onClick={() => setSelectedItem(null)}
         >
           {items.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-48 text-slate-400 gap-1.5 col-span-full">
-              <FolderSVG />
-              <span className="text-xs text-black/40 mt-1">This folder is empty. Drop files here or right-click to create one.</span>
+              <FolderIconBlock />
+              <span className="text-xs text-black/40 mt-1">This folder is empty. Right-click or drag files here to add items.</span>
             </div>
           ) : (
             items.map((item) => (
@@ -205,17 +203,13 @@ export default function FolderWindow({
                     : 'hover:bg-slate-100 border border-transparent'
                 }`}
               >
-                <div className="w-12 h-12 flex items-center justify-center">
-                  {item.thumbnail ? (
-                    <img src={item.thumbnail} alt={item.name} className="w-11 h-11 rounded-lg object-cover shadow-sm" />
-                  ) : item.type === 'folder' ? (
-                    <FolderSVG />
-                  ) : item.type === 'image' ? (
-                    <ImageSVG />
-                  ) : (
-                    <FileTextSVG />
-                  )}
-                </div>
+                {item.type === 'folder' ? (
+                  <FolderIconBlock />
+                ) : item.type === 'image' ? (
+                  <ImageIconBlock thumbnail={item.thumbnail} />
+                ) : (
+                  <FileTextIconBlock />
+                )}
                 <span className="text-xs text-black/80 font-medium text-center truncate w-full group-hover:text-blue-600">
                   {item.name}
                 </span>
@@ -225,14 +219,14 @@ export default function FolderWindow({
         </div>
       </div>
 
-      {/* Slim 6:16 Ratio PowerToys Peek Preview Sidebar Pane */}
+      {/* Slim 6:16 Ratio PowerToys Style Preview Sidebar Pane */}
       <AnimatePresence>
         {selectedItem && (
           <motion.div
             initial={{ x: 220, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: 220, opacity: 0 }}
-            className="w-52 bg-slate-50 border-l border-slate-200 p-3 flex flex-col gap-2.5 shadow-xl z-20 overflow-y-auto"
+            className="w-52 bg-slate-50 border-l border-slate-200 p-3 flex flex-col gap-2.5 shadow-xl z-20 overflow-y-auto shrink-0"
           >
             {/* Header */}
             <div className="flex items-center justify-between border-b border-slate-200 pb-1.5">
@@ -252,9 +246,9 @@ export default function FolderWindow({
               {selectedItem.thumbnail ? (
                 <img src={selectedItem.thumbnail} alt={selectedItem.name} className="w-full h-full object-cover" />
               ) : selectedItem.type === 'folder' ? (
-                <div className="scale-125"><FolderSVG /></div>
+                <FolderIconBlock />
               ) : (
-                <div className="scale-125"><FileTextSVG /></div>
+                <FileTextIconBlock />
               )}
               <span className="absolute bottom-1.5 left-1.5 px-2 py-0.5 rounded bg-black/60 backdrop-blur-md text-[9px] font-semibold text-white uppercase">
                 {selectedItem.type || 'Item'}
@@ -290,7 +284,7 @@ export default function FolderWindow({
         )}
       </AnimatePresence>
 
-      {/* Right-Click Context Menu */}
+      {/* Internal Context Menu Triggered by Right Clicking Inside Tab */}
       <AnimatePresence>
         {contextMenu.show && (
           <motion.div
